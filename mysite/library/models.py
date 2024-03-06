@@ -1,5 +1,7 @@
 from django.db import models
 
+# from django.db.models import Deferrable, UniqueConstraint
+
 
 class IsActive(models.Model):
     """
@@ -19,10 +21,18 @@ class Person(IsActive):
     """
 
     name = models.CharField(max_length=15)
-    second_name = models.CharField(max_length=15, blank=True, null=True)
+    second_name = models.CharField(max_length=15, blank=True)
     surname = models.CharField(max_length=15)
     birth_date = models.DateField()
-    death_date = models.DateField(blank=True, null=True)
+    death_date = models.DateField(blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "second_name", "surname", "birth_date", "death_date"],
+                name="unique_person",
+            )
+        ]
 
     def __str__(self) -> str:
         return f"{self.name} {self.surname}"
@@ -45,8 +55,12 @@ class Rent(models.Model):
     Rent class for borrowed books and things connected.
     """
 
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    user = models.ForeignKey(Person, on_delete=models.CASCADE)
+    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE,
+        limit_choices_to={"is_active": True},
+    )
     borrowed_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(blank=True, null=True)
 
@@ -54,9 +68,9 @@ class Rent(models.Model):
         return f"Book:{self.book.id} borrowed by user:{self.user.id}"
 
 
-# TODO: django debug toolbar /while debug true
-# TODO: django extensions /while debug true
+# TODO: django debug toolbar /while debug true  done
+# TODO: django extensions /while debug true     askbout debug true - no url
 # TODO: rental efficiency zapytac
-# TODO: no renting already rented books /uniq_together
-# TODO: uniq_together books and users adding
-# TODO: rental available only for active persons
+# TODO: no renting already rented books /uniq_together done
+# TODO: uniq_together books and users adding           done
+# TODO: rental available only for active persons       trouble
