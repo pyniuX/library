@@ -1,6 +1,5 @@
+from django.contrib import admin
 from django.db import models
-
-# from django.db.models import Deferrable, UniqueConstraint
 
 
 class IsActive(models.Model):
@@ -21,10 +20,14 @@ class Person(IsActive):
     """
 
     name = models.CharField(max_length=15)
-    second_name = models.CharField(max_length=15, blank=True, null=True)
+    second_name = models.CharField(
+        max_length=15,
+        default="",
+        blank=True,
+    )
     surname = models.CharField(max_length=15)
     birth_date = models.DateField()
-    death_date = models.DateField(blank=True, null=True)
+    death_date = models.DateField(null=True, blank=True)
 
     class Meta:
         constraints = [
@@ -47,7 +50,7 @@ class Book(IsActive):
     title = models.CharField(max_length=512)
 
     def __str__(self) -> str:
-        return f"id:{self.id}, {self.title}"
+        return f"[id:{self.id}] {self.title} "
 
 
 class Rent(models.Model):
@@ -55,14 +58,23 @@ class Rent(models.Model):
     Rent class for borrowed books and things connected.
     """
 
-    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
         limit_choices_to={"is_active": True},
     )
-    borrowed_date = models.DateField(auto_now_add=True)
+    borrow_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(blank=True, null=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["book"],
+                condition=models.Q(return_date__isnull=True),
+                name="unique_book_rent",
+            )
+        ]
+
     def __str__(self) -> str:
-        return f"Book:{self.book.id} borrowed by user:{self.user.id}"
+        return f"Book:{self.book_id} borrowed by user:{self.user_id}"
