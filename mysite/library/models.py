@@ -21,15 +21,15 @@ class Person(IsActive):
     """
 
     name = models.CharField(max_length=15)
-    second_name = models.CharField(max_length=15, blank=True)
+    second_name = models.CharField(max_length=15, blank=True, null=True)
     surname = models.CharField(max_length=15)
     birth_date = models.DateField()
-    death_date = models.DateField(blank=True)
+    death_date = models.DateField(blank=True, null=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["name", "second_name", "surname", "birth_date", "death_date"],
+                fields=["name", "surname", "birth_date"],
                 name="unique_person",
             )
         ]
@@ -66,11 +66,3 @@ class Rent(models.Model):
 
     def __str__(self) -> str:
         return f"Book:{self.book.id} borrowed by user:{self.user.id}"
-
-
-# TODO: django debug toolbar /while debug true  done
-# TODO: django extensions /while debug true     askbout debug true - no url
-# TODO: rental efficiency zapytac
-# TODO: no renting already rented books /uniq_together done
-# TODO: uniq_together books and users adding           done
-# TODO: rental available only for active persons       trouble
