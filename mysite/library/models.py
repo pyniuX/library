@@ -2,6 +2,26 @@ from django.contrib import admin
 from django.db import models
 
 
+class BookManager(models.Manager):
+    """
+    Class for custom queryset methods.
+    """
+
+    def book_status(self):
+
+        condition = models.Q(id__in=self.filter_available())
+        return self.annotate(is_available=condition)
+
+    def filter_borrowed(self):
+        return self.filter(
+            rent__return_date__isnull=True, rent__borrow_date__isnull=False
+        )
+
+    def filter_available(self):
+        borrowed = self.filter_borrowed()
+        return self.exclude(id__in=borrowed)
+
+
 class IsActive(models.Model):
     """
     Parent class containing is_active bracket
@@ -49,6 +69,8 @@ class Book(IsActive):
     authors = models.ManyToManyField(Person)
     title = models.CharField(max_length=512)
 
+    objects = BookManager()
+
     def __str__(self) -> str:
         return f"[id:{self.id}] {self.title} "
 
@@ -78,3 +100,12 @@ class Rent(models.Model):
 
     def __str__(self) -> str:
         return f"Book:{self.book_id} borrowed by user:{self.user_id}"
+
+
+# TODO: wyszukaj książkę: status książki z punktu widzenia użytkownika
+# TODO: wyszukaj użytkownika z informacją: status wypożyczeń
+# TODO książki w aktywnym wypożyczeniu,
+# TODO książki dostępne do wypożyczenia
+# TODO: historia wypożyczeń użytkownika
+# TODO: historia wypożyczeń książki
+# TODO: pokaz autorów i książki
