@@ -4,30 +4,75 @@ from django.db import models
 
 class BookManager(models.Manager):
     """
-    Class for custom queryset methods.
+    Class for Book class  connected custom queryset methods.
     """
 
-    def book_status(self):
+    def status(self):
         """
-        Returns book_id, title and is_available for every book.
+        Returns if book is_available to rent for every book.
         """
-        condition = models.Q(id__in=self.filter_available())
-        return self.annotate(is_available=condition).values(
-            "id", "title", "is_available"
-        )
+        condition = models.Q(id__in=self.available())
+        return self.annotate(is_available=condition)
 
-    def filter_borrowed(self):
+    def available(self):
+        """
+        Returns all books that are 'on shelf' and can be borrowed.
+        """
+        return self.exclude(id__in=self.borrowed())
+
+    def borrowed(self):
         """
         Returns all books that are borrowed and hadn't been returned.
         """
         return self.filter(rent__return_date__isnull=True, rent__book__isnull=False)
 
-    def filter_available(self):
+
+class RentQuerySet(models.QuerySet):
+    """
+    Class for Rent class connected custom queryset methods.
+    """
+
+    def for_books(self, *book_ids: int):
         """
-        Returns all books that are 'on shelf' and can be borrowed.
+        Returns rent history of book with given id.
         """
-        borrowed = self.filter_borrowed()
-        return self.exclude(id__in=borrowed)
+        return self.filter(book__in=book_ids)
+
+    def for_users(self, *user_ids: int):
+        """
+        Returns rent history of user with given id.
+        """
+        return self.filter(user__in=user_ids)
+
+    def by_closed(self):
+        """
+        Returns closed rents.
+        """
+        return self.by_return_date(False)
+
+    def opened(self):
+        """
+        Returns open rents.
+        """
+        return self.by_return_date(True)
+
+    def by_return_date(self, value: bool):
+        """
+        Help function returning open or close rents, depending on given value.
+        """
+        return self.filter(return_date__isnull=value)
+
+
+class UserManager(models.Manager):
+    """
+    Class for User class connected custom queryset methods.
+    """
+
+    def status(self):
+        """
+        Returns account balance of every user.
+        """
+        return None
 
 
 class IsActive(models.Model):
@@ -97,6 +142,8 @@ class Rent(models.Model):
     borrow_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(blank=True, null=True)
 
+    objects = RentQuerySet().as_manager()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
@@ -110,10 +157,10 @@ class Rent(models.Model):
         return f"Book:{self.book_id} borrowed by user:{self.user_id}"
 
 
-# TODO wyszukaj książkę: status książki z punktu widzenia użytkownika
+# DPME wyszukaj książkę: status książki z punktu widzenia użytkownika
 # TODO: wyszukaj użytkownika z informacją: status wypożyczeń
-# TODO książki w aktywnym wypożyczeniu,
-# TODO książki dostępne do wypożyczenia
-# TODO: historia wypożyczeń użytkownika
-# TODO: historia wypożyczeń książki
+# DONE książki w aktywnym wypożyczeniu,
+# DONE książki dostępne do wypożyczenia
+# DONE historia wypożyczeń użytkownika
+# DONE historia wypożyczeń książki
 # TODO: pokaz autorów i książki
