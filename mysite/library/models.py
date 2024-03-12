@@ -43,6 +43,14 @@ class Person(IsActive):
         Class for User class connected custom queryset methods.
         """
 
+        def authors(self):
+            """
+            Returns authors.
+            """
+            return self.filter()
+
+        # FIXME: distinct, finish authors without repeating
+
         def count_rents(self, count_filter=None):
             """
             Returns number of all rents for user, depending on a filter..
@@ -59,7 +67,7 @@ class Person(IsActive):
                 count_filter=models.Q(rent__in=Rent.objects.closed())
             )
 
-        def count_ongoing_rents(self):
+        def count_opened_rents(self):
             """
             Returns number of ongoing rents for user in book_count field.
             """
@@ -182,7 +190,7 @@ class Rent(models.Model):
 
 
 # DONE wyszukaj książkę: status książki z punktu widzenia użytkownika
-# TODO: wyszukaj użytkownika z informacją: status wypożyczeń
+# DONE wyszukaj użytkownika z informacją: status wypożyczeń
 # DONE książki w aktywnym wypożyczeniu,
 # DONE książki dostępne do wypożyczenia
 # DONE historia wypożyczeń użytkownika
