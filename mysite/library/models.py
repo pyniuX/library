@@ -8,16 +8,24 @@ class BookManager(models.Manager):
     """
 
     def book_status(self):
-
+        """
+        Returns book_id, title and is_available for every book.
+        """
         condition = models.Q(id__in=self.filter_available())
-        return self.annotate(is_available=condition)
-
-    def filter_borrowed(self):
-        return self.filter(
-            rent__return_date__isnull=True, rent__borrow_date__isnull=False
+        return self.annotate(is_available=condition).values(
+            "id", "title", "is_available"
         )
 
+    def filter_borrowed(self):
+        """
+        Returns all books that are borrowed and hadn't been returned.
+        """
+        return self.filter(rent__return_date__isnull=True, rent__book__isnull=False)
+
     def filter_available(self):
+        """
+        Returns all books that are 'on shelf' and can be borrowed.
+        """
         borrowed = self.filter_borrowed()
         return self.exclude(id__in=borrowed)
 
@@ -102,7 +110,7 @@ class Rent(models.Model):
         return f"Book:{self.book_id} borrowed by user:{self.user_id}"
 
 
-# TODO: wyszukaj książkę: status książki z punktu widzenia użytkownika
+# TODO wyszukaj książkę: status książki z punktu widzenia użytkownika
 # TODO: wyszukaj użytkownika z informacją: status wypożyczeń
 # TODO książki w aktywnym wypożyczeniu,
 # TODO książki dostępne do wypożyczenia
