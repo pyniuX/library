@@ -81,15 +81,17 @@ class PersonClassTests(TestCase):
         for e in cls.list_persons:
             e.save()
         cls.db_ids = {
-            "authors_not_users": [7, 8],
+            "users_only": [1, 2, 3, 4],
+            "users and authors": [5, 6],
+            "authors_only": [7, 8],
         }
 
     def test_qs_active_should_yield_plain_qs(self):
         """
-        Active queryset method should result in plain qs, after given data.
+        is_active should result in plain qs,
+        given data: authors_only and one undeclared field
         """
-
-        for id in self.db_ids["authors_not_users"]:
+        for id in self.db_ids["authors_only"]:
             with self.subTest():
                 self.assertEqual(Person.objects.filter(id=id).active().count(), 0)
         self.assertEqual(
@@ -98,11 +100,22 @@ class PersonClassTests(TestCase):
 
     def test_qs_active_should_yield_all_active(self):
         """
-        Active queryset method should result in all Persons from database, where is_active = True.
+        is_active should result in all persons from database, where is_active = True
+        given data: all persons
         """
-
         self.assertQuerySetEqual(
             Person.objects.active(),
-            Person.objects.exclude(id__in=self.db_ids["authors_not_users"]),
+            Person.objects.exclude(id__in=self.db_ids["authors_only"]),
+            ordered=False,
+        )
+
+    def test_qs_active_should_yield_all_users(self):
+        """
+        is_active should result in all users
+        given data: users_only
+        """
+        self.assertQuerySetEqual(
+            Person.objects.filter(id__in=self.db_ids["users_only"]).active(),
+            Person.objects.filter(id__in=self.db_ids["users_only"]),
             ordered=False,
         )
