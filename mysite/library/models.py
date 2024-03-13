@@ -43,13 +43,18 @@ class Person(IsActive):
         Class for User class connected custom queryset methods.
         """
 
+        def active(self):
+            """
+            Returns persons with is_active true: active library users and author-users.
+            """
+            return self.filter(is_active=True)
+
         def authors(self):
             """
-            Returns authors.
+            Returns authors (persons with at least one written book).
             """
-            return self.filter()
-
-        # FIXME: distinct, finish authors without repeating
+            ids = [self.filter(book__authors__isnull=False).distinct().values("id")]
+            return self.filter(id__in=ids)
 
         def count_rents(self, count_filter=None):
             """
@@ -74,6 +79,19 @@ class Person(IsActive):
             return self.count_rents(
                 count_filter=models.Q(rent__in=Rent.objects.opened())
             )
+
+        def inactive(self):
+            """
+            Returns persons with is_active false: non-user authors, and former users.
+            """
+            return self.filter(is_active=False)
+
+        def users(self):
+            """
+            Returns users (persons with at least one borrowed book).
+            """
+            ids = [self.filter(rent__user__isnull=False).distinct().values("id")]
+            return self.filter(id__in=ids)
 
     objects = PersonQuerySet().as_manager()
 
