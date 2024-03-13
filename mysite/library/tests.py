@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.test import TestCase
 
@@ -6,14 +8,101 @@ from .models import Book, IsActive, Person, Rent
 # Create your tests here.
 
 
-class IsActiveTests(TestCase):
+class PersonClassTests(TestCase):
     """
-    Test for parental class IsActive from models.py
+    Test for Person class form models.py
     """
 
-    def setUP(self) -> None:
-        self.list_objects = [
-            IsActive(),
-            IsActive(is_active=True),
-            IsActive(is_active=False),
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.list_persons = [
+            # only users
+            # list_index = 0, db_id =  1
+            Person(
+                name="Adam",
+                surname="Wąsek",
+                birth_date=datetime.date(1996, 6, 12),
+            ),
+            # list_index = 1, db_id =  2
+            Person(
+                name="Piotr",
+                surname="Adamczyk",
+                birth_date=datetime.date(1988, 5, 1),
+                is_active=True,
+            ),
+            # list_index = 2, db_id =  3
+            Person(
+                name="Anna",
+                second_name="Katarzyna",
+                surname="Lewandowska",
+                birth_date=datetime.date(2000, 1, 1),
+            ),
+            # list_index = 3, db_id =  4
+            Person(
+                name="Hanna",
+                second_name="Weronika",
+                surname="Łęcka",
+                birth_date=datetime.date(1965, 2, 5),
+                is_active=True,
+            ),
+            # users and authors
+            # list_index = 4, db_id =  5
+            Person(
+                name="Olga",
+                second_name="Nawoja",
+                surname="Tokarczuk",
+                birth_date=datetime.date(1962, 1, 29),
+            ),
+            # list_index = 5, db_id =  6
+            Person(
+                name="Remigiusz",
+                surname="Mróz",
+                birth_date=datetime.date(1987, 1, 15),
+            ),
+            # only authors
+            # list_index = 6, db_id =  7
+            Person(
+                name="Adam",
+                second_name="Bernard",
+                surname="Mickiewicz",
+                birth_date=datetime.date(1798, 12, 13),
+                death_date=datetime.date(1855, 11, 26),
+                is_active=False,
+            ),
+            # list_index = 7, db_id =  8
+            Person(
+                name="Zofia",
+                surname="Nałkowska",
+                birth_date=datetime.date(1884, 11, 10),
+                death_date=datetime.date(1954, 12, 17),
+                is_active=False,
+            ),
         ]
+        for e in cls.list_persons:
+            e.save()
+        cls.db_ids = {
+            "authors_not_users": [7, 8],
+        }
+
+    def test_qs_active_should_yield_plain_qs(self):
+        """
+        Active queryset method should result in plain qs, after given data.
+        """
+
+        for id in self.db_ids["authors_not_users"]:
+            with self.subTest():
+                self.assertEqual(Person.objects.filter(id=id).active().count(), 0)
+        self.assertEqual(
+            Person.objects.filter(id=len(self.list_persons) + 1).active().count(), 0
+        )
+
+    def test_qs_active_should_yield_all_active(self):
+        """
+        Active queryset method should result in all Persons from database, where is_active = True.
+        """
+
+        self.assertQuerySetEqual(
+            Person.objects.active(),
+            Person.objects.exclude(id__in=self.db_ids["authors_not_users"]),
+            ordered=False,
+        )
