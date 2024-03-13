@@ -88,19 +88,23 @@ class PersonClassTests(TestCase):
 
     def test_qs_active_should_yield_plain_qs(self):
         """
-        is_active should result in plain qs,
+        is_active() should result in plain qs,
         given data: authors_only and one undeclared field
         """
-        for id in self.db_ids["authors_only"]:
-            with self.subTest():
-                self.assertEqual(Person.objects.filter(id=id).active().count(), 0)
+        with self.subTest():
+            self.assertEqual(
+                Person.objects.filter(id__in=self.db_ids["authors_only"])
+                .active()
+                .count(),
+                0,
+            )
         self.assertEqual(
             Person.objects.filter(id=len(self.list_persons) + 1).active().count(), 0
         )
 
     def test_qs_active_should_yield_all_active(self):
         """
-        is_active should result in all persons from database, where is_active = True
+        is_active() should result in all persons from database, where is_active = True
         given data: all persons
         """
         self.assertQuerySetEqual(
@@ -109,9 +113,9 @@ class PersonClassTests(TestCase):
             ordered=False,
         )
 
-    def test_qs_active_should_yield_all_users(self):
+    def test_qs_active_should_yield_all_active_from_users(self):
         """
-        is_active should result in all users
+        is_active() should result in all users
         given data: users_only
         """
         self.assertQuerySetEqual(
@@ -119,3 +123,31 @@ class PersonClassTests(TestCase):
             Person.objects.filter(id__in=self.db_ids["users_only"]),
             ordered=False,
         )
+
+    def test_qs_authors_should_yield_plain_qs(self):
+        """
+        authors() should result in plain qs
+        given data: users_only and one undeclared field
+        """
+        with self.subTest():
+            self.assertEqual(
+                Person.objects.filter(id__in=self.db_ids["users_only"])
+                .authors()
+                .count(),
+                0,
+            )
+        self.assertEqual(Person.objects.filter(id=0).authors().count(), 0)
+
+    def test_qs_authors_should_yield_all_authors(self):
+        """
+        authors() should result in all authors from database, who have at least one book in Book class
+        given data: all persons
+        """
+        self.assertQuerySetEqual(
+            Person.objects.authors(),
+            Person.objects.filter(id__in=self.db_ids["authors_only"]),
+            ordered=False,
+        )
+
+
+# TODO: create books, because authors() method is not working without it
