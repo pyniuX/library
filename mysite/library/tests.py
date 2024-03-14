@@ -167,5 +167,19 @@ class PersonClassTests(TestCase):
             ordered=False,
         )
 
+    def test_qs_authors_should_yield_all_authors_from_authors(self):
+        """
+        authors() should result in all authors
+        given data: authors_only and users_and_authors
+        """
+        self.assertQuerySetEqual(
+            Person.objects.filter(
+                id__in=self.db_ids["authors_only"] + self.db_ids["users_and_authors"]
+            ).authors(),
+            Person.objects.filter(
+                id__in=self.db_ids["authors_only"] + self.db_ids["users_and_authors"]
+            ),
+        )
+
 
 # TODO: create books, because authors() method is not working without it
