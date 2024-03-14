@@ -78,8 +78,7 @@ class PersonClassTests(TestCase):
                 is_active=False,
             ),
         ]
-        for e in cls.list_persons:
-            e.save()
+
         cls.list_books = [
             # list_index = 0, db_id =  1
             Book(title="Bieguni"),
@@ -91,16 +90,62 @@ class PersonClassTests(TestCase):
             Book(title="Nad Niemnem"),
             # list_index = 4, db_id =  5
         ]
+
         cls.db_ids = {
             "users_only": [1, 2, 3, 4],
             "users_and_authors": [5, 6],
             "authors_only": [7, 8],
+            "users_with_open_rents": [3, 5],
+            "users_with_closed_rents": [1, 3, 5],
+            "rents_number": [1, 0, 2, 0, 2, 0, 0, 0],
         }
+        for e in cls.list_persons:
+            e.save()
         licznik = len(cls.db_ids["users_only"]) + 1
         for e in cls.list_books:
             e.save()
             e.authors.add(Person.objects.get(id=licznik))
-            licznik = licznik + 1
+            licznik += 1
+
+        cls.list_rents = [
+            # ended rents
+            # list_index = 0, db_id =  1
+            Rent(
+                book=Book.objects.get(id=1),
+                user=Person.objects.get(id=1),
+                borrow_date=datetime.date(2023, 10, 4),
+                return_date=datetime.date(2023, 11, 6),
+            ),
+            # list_index = 1, db_id =  2
+            Rent(
+                book=Book.objects.get(id=1),
+                user=Person.objects.get(id=5),
+                borrow_date=datetime.date(2024, 1, 4),
+                return_date=datetime.date(2024, 2, 2),
+            ),
+            # list_index = 2, db_id =  3
+            Rent(
+                book=Book.objects.get(id=2),
+                user=Person.objects.get(id=3),
+                borrow_date=datetime.date(2024, 1, 18),
+                return_date=datetime.date(2024, 2, 6),
+            ),
+            # ongoing rents
+            # list_index = 3, db_id =  4
+            Rent(
+                book=Book.objects.get(id=1),
+                user=Person.objects.get(id=3),
+                borrow_date=datetime.date(2024, 3, 12),
+            ),
+            # list_index = 4, db_id =  5
+            Rent(
+                book=Book.objects.get(id=2),
+                user=Person.objects.get(id=5),
+                borrow_date=datetime.date(2024, 3, 1),
+            ),
+        ]
+        for e in cls.list_rents:
+            e.save()
 
     def test_qs_active_should_yield_plain_qs(self):
         """
@@ -179,7 +224,38 @@ class PersonClassTests(TestCase):
             Person.objects.filter(
                 id__in=self.db_ids["authors_only"] + self.db_ids["users_and_authors"]
             ),
+            ordered=False,
         )
+
+    def test_qs_annotate_rents_number_should_yield_zero(self):
+        """
+        annotate_rents_number should result in annotated rents_count fields with value 0
+        given data: users without any rents
+        """
+        ids_with_any_rents = list(
+            set(
+                self.db_ids["users_with_closed_rents"]
+                + self.db_ids["users_with_open_rents"]
+            )
+        )
+        ids_without_any_rents = [i for i in range(1, 9) if i not in ids_with_any_rents]
+        for e in Person.objects.filter(
+            id__in=ids_without_any_rents
+        ).annotate_rents_number():
+            with self.subTest():
+                self.assertEqual(e.rents_count, 0)
+
+    def test_qs_annotate_rents_number_should_yield_appropriate_values(self):
+        """
+        annotate_rents_number should result in annotated rents_count fields with values from self.db[count_rents]
+        given data: all persons
+        """
+
+        licznik = 0
+        for e in Person.objects.order_by("id").annotate_rents_number():
+            with self.subTest():
+                self.assertEqual(e.rents_count, self.db_ids["rents_number"][licznik])
+            licznik += 1
 
 
 # TODO: create books, because authors() method is not working without it

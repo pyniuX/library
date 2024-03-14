@@ -48,6 +48,7 @@ class Person(IsActive):
             Returns persons with is_active true: active library users and author-users.
             """
             return self.filter(is_active=True)
+            # tested
 
         def authors(self):
             """
@@ -55,28 +56,29 @@ class Person(IsActive):
             """
             ids = [self.filter(book__authors__isnull=False).distinct().values("id")]
             return self.filter(id__in=ids)
+            # tested
 
-        def count_rents(self, count_filter=None):
+        def annotate_rents_number(self, count_filter=None):
             """
             Returns number of all rents for user, depending on a filter..
             """
             return self.annotate(
-                book_count=models.Count("rent__book", filter=count_filter)
+                rents_count=models.Count("rent__book", filter=count_filter)
             )
 
-        def count_closed_rents(self):
+        def annotate_closed_rents_number(self):
             """
             Returns number of closed rents for user in book_count field.
             """
-            return self.count_rents(
+            return self.annotate_rents_number(
                 count_filter=models.Q(rent__in=Rent.objects.closed())
             )
 
-        def count_opened_rents(self):
+        def annotate_opened_rents_number(self):
             """
             Returns number of ongoing rents for user in book_count field.
             """
-            return self.count_rents(
+            return self.annotate_rents_number(
                 count_filter=models.Q(rent__in=Rent.objects.opened())
             )
 
