@@ -250,11 +250,34 @@ class PersonClassTests(TestCase):
         annotate_rents_number should result in annotated rents_count fields with values from self.db[count_rents]
         given data: all persons
         """
-
         licznik = 0
         for e in Person.objects.order_by("id").annotate_rents_number():
             with self.subTest():
                 self.assertEqual(e.rents_count, self.db_ids["rents_number"][licznik])
+            licznik += 1
+
+    def test_qs_annotate_rents_number_should_yield_appropriate_values_2(self):
+        """
+        annotate_rents_number should result in annotated rents_count fields with values from self.db[count_rents]
+        given data: persons with at least one rent
+        """
+        ids_with_any_rents = list(
+            set(
+                self.db_ids["users_with_closed_rents"]
+                + self.db_ids["users_with_open_rents"]
+            )
+        )
+        licznik = 0
+        for e in (
+            Person.objects.filter(id__in=ids_with_any_rents)
+            .order_by("id")
+            .annotate_rents_number()
+        ):
+            with self.subTest():
+                self.assertEqual(
+                    e.rents_count,
+                    self.db_ids["rents_number"][ids_with_any_rents[licznik] - 1],
+                )
             licznik += 1
 
 
