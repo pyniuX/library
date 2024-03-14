@@ -229,7 +229,7 @@ class PersonClassTests(TestCase):
 
     def test_qs_annotate_rents_number_should_yield_zero(self):
         """
-        annotate_rents_number should result in annotated rents_count fields with value 0
+        .annotate_rents_number() should result in annotated rents_count fields with value 0
         given data: users without any rents
         """
         ids_with_any_rents = list(
@@ -247,7 +247,7 @@ class PersonClassTests(TestCase):
 
     def test_qs_annotate_rents_number_should_yield_appropriate_values(self):
         """
-        annotate_rents_number should result in annotated rents_count fields with values from self.db[count_rents]
+        .annotate_rents_number() should result in annotated rents_count fields with values from self.db[count_rents]
         given data: all persons
         """
         licznik = 0
@@ -258,7 +258,7 @@ class PersonClassTests(TestCase):
 
     def test_qs_annotate_rents_number_should_yield_appropriate_values_2(self):
         """
-        annotate_rents_number should result in annotated rents_count fields with values from self.db[count_rents]
+        .annotate_rents_number() should result in annotated rents_count fields with values from self.db[count_rents]
         given data: persons with at least one rent
         """
         ids_with_any_rents = list(
@@ -279,6 +279,17 @@ class PersonClassTests(TestCase):
                     self.db_ids["rents_number"][ids_with_any_rents[licznik] - 1],
                 )
             licznik += 1
+
+    def test_qs_inactive(self):
+        """
+        .inactive() should result in all persons with is_active = False
+        given data: all persons
+        """
+        self.assertQuerySetEqual(
+            Person.objects.inactive(),
+            Person.objects.filter(id__in=self.db_ids["authors_only"]),
+            ordered=False,
+        )
 
 
 # TODO: create books, because authors() method is not working without it

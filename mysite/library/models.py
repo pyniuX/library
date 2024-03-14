@@ -65,6 +65,7 @@ class Person(IsActive):
             return self.annotate(
                 rents_count=models.Count("rent__book", filter=count_filter)
             )
+            # tested
 
         def annotate_closed_rents_number(self):
             """
@@ -73,6 +74,7 @@ class Person(IsActive):
             return self.annotate_rents_number(
                 count_filter=models.Q(rent__in=Rent.objects.closed())
             )
+            # tested
 
         def annotate_opened_rents_number(self):
             """
@@ -81,6 +83,7 @@ class Person(IsActive):
             return self.annotate_rents_number(
                 count_filter=models.Q(rent__in=Rent.objects.opened())
             )
+            # tested
 
         def inactive(self):
             """
