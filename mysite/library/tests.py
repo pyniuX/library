@@ -80,11 +80,27 @@ class PersonClassTests(TestCase):
         ]
         for e in cls.list_persons:
             e.save()
+        cls.list_books = [
+            # list_index = 0, db_id =  1
+            Book(title="Bieguni"),
+            # list_index = 1, db_id =  2
+            Book(title="Uprowadzenie"),
+            # list_index = 2, db_id =  3
+            Book(title="Pan Tadeusz"),
+            # list_index = 3, db_id =  4
+            Book(title="Nad Niemnem"),
+            # list_index = 4, db_id =  5
+        ]
         cls.db_ids = {
             "users_only": [1, 2, 3, 4],
-            "users and authors": [5, 6],
+            "users_and_authors": [5, 6],
             "authors_only": [7, 8],
         }
+        licznik = len(cls.db_ids["users_only"]) + 1
+        for e in cls.list_books:
+            e.save()
+            e.authors.add(Person.objects.get(id=licznik))
+            licznik = licznik + 1
 
     def test_qs_active_should_yield_plain_qs(self):
         """
@@ -145,7 +161,9 @@ class PersonClassTests(TestCase):
         """
         self.assertQuerySetEqual(
             Person.objects.authors(),
-            Person.objects.filter(id__in=self.db_ids["authors_only"]),
+            Person.objects.filter(
+                id__in=self.db_ids["authors_only"] + self.db_ids["users_and_authors"],
+            ),
             ordered=False,
         )
 

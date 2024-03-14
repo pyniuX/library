@@ -215,3 +215,4 @@ class Rent(models.Model):
 # DONE historia wypożyczeń książki
 # TODO: pokaz autorów i książki
 # TODO: wypożyczenia z okresy
+# TODO: unittesty
