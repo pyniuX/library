@@ -192,12 +192,6 @@ class Rent(models.Model):
             """
             return self.filter(user__in=user_ids)
 
-        # def since(self, date: datetime.date):
-        #     """
-        #     Returns rents greater than or equal to given date..
-        #     """
-        #     return self.filter()
-
         def opened(self):
             """
             Returns open rents.
@@ -216,6 +210,6 @@ class Rent(models.Model):
 # DONE książki dostępne do wypożyczenia
 # DONE historia wypożyczeń użytkownika
 # DONE historia wypożyczeń książki
-# TODO: pokaz autorów i książki
+# DONE pokaz autorów i książki
 # TODO: wypożyczenia z okresy
 # TODO: unittesty

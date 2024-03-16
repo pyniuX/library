@@ -148,6 +148,16 @@ class SetUpTestData(TestCase):
         for e in cls.list_rents:
             e.save()
 
+        cls.users_with_any_rents = list(
+            set(
+                cls.db_ids["users_with_closed_rents"]
+                + cls.db_ids["users_with_open_rents"]
+            )
+        )
+        cls.users_without_any_rents = [
+            i for i in range(1, 9) if i not in cls.users_with_any_rents
+        ]
+
     class Meta:
         abstract = True
 
@@ -246,15 +256,8 @@ class PersonClassTests(SetUpTestData):
         .annotate_rents_number() should result in annotated rents_count fields with value 0
         given data: users without any rents
         """
-        ids_with_any_rents = list(
-            set(
-                self.db_ids["users_with_closed_rents"]
-                + self.db_ids["users_with_open_rents"]
-            )
-        )
-        ids_without_any_rents = [i for i in range(1, 9) if i not in ids_with_any_rents]
         for e in Person.objects.filter(
-            id__in=ids_without_any_rents
+            id__in=self.users_without_any_rents
         ).annotate_rents_number():
             with self.subTest():
                 self.assertEqual(e.rents_count, 0)
@@ -471,5 +474,43 @@ class RentClassTests(SetUpTestData):
             self.assertQuerySetEqual(
                 Rent.objects.for_books(e),
                 Rent.objects.filter(book=e),
+                ordered=False,
+            )
+
+    def test_qs_for_users(self):
+        """
+        .for_users() returns plain qs
+        given data: users without history and one plain field
+        """
+        help_list = self.users_without_any_rents
+        help_list.append(Person.objects.count() + 1)
+
+        for e in help_list:
+            with self.subTest():
+                self.assertEqual(Rent.objects.for_users(e).count(), 0)
+
+    def test_qs_for_users_yield_appropriate_values_for_persons(self):
+        """
+        .for_users() returns all rents for given user id
+        given data: all persons
+        """
+
+        for e in range(1, Person.objects.count()):
+            with self.subTest():
+                self.assertQuerySetEqual(
+                    Rent.objects.for_users(e),
+                    Rent.objects.filter(user=e),
+                    ordered=False,
+                )
+
+    def test_qs_for_users_yield_appropriate_values_for_users(self):
+        """
+        .for_users() returns all rents for given user id
+        given data: all users
+        """
+        for e in self.users_with_any_rents:
+            self.assertQuerySetEqual(
+                Rent.objects.for_users(e),
+                Rent.objects.filter(user=e),
                 ordered=False,
             )
