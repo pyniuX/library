@@ -90,13 +90,7 @@ class Person(IsActive):
             Returns persons with is_active false: non-user authors, and former users.
             """
             return self.filter(is_active=False)
-
-        def users(self):
-            """
-            Returns users (persons with at least one borrowed book).
-            """
-            ids = [self.filter(rent__user__isnull=False).distinct().values("id")]
-            return self.filter(id__in=ids)
+            # tested
 
     objects = PersonQuerySet().as_manager()
 

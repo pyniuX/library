@@ -8,13 +8,13 @@ from .models import Book, IsActive, Person, Rent
 # Create your tests here.
 
 
-class PersonClassTests(TestCase):
+class SetUpTestData(TestCase):
     """
-    Test for Person class form models.py
+    Parent class containing method for setting up test data
     """
 
     @classmethod
-    def setUpTestData(cls) -> None:
+    def setup_database(cls) -> None:
         cls.list_persons = [
             # only users
             # list_index = 0, db_id =  1
@@ -98,6 +98,7 @@ class PersonClassTests(TestCase):
             "users_with_open_rents": [3, 5],
             "users_with_closed_rents": [1, 3, 5],
             "rents_number": [1, 0, 2, 0, 2, 0, 0, 0],
+            "borrowed_books": [1, 2],
         }
         for e in cls.list_persons:
             e.save()
@@ -146,6 +147,19 @@ class PersonClassTests(TestCase):
         ]
         for e in cls.list_rents:
             e.save()
+
+    class Meta:
+        abstract = True
+
+
+class PersonClassTests(SetUpTestData):
+    """
+    Test for Person class form models.py
+    """
+
+    @classmethod
+    def setUpTestData(self) -> None:
+        SetUpTestData.setup_database()
 
     def test_qs_active_should_yield_plain_qs(self):
         """
@@ -288,6 +302,49 @@ class PersonClassTests(TestCase):
         self.assertQuerySetEqual(
             Person.objects.inactive(),
             Person.objects.filter(id__in=self.db_ids["authors_only"]),
+            ordered=False,
+        )
+
+
+class BookClassTests(SetUpTestData):
+
+    @classmethod
+    def setUpTestData(self) -> None:
+        SetUpTestData.setup_database()
+
+    def test_qs_borrowed_returns_plain_qs(self):
+        """
+        .borrowed() should result in plaint qs
+        given data: all books that are not actively borrowed and one plain field
+        """
+        not_borrowed_books = [
+            e
+            for e in range(1, Book.objects.count() + 1)
+            if e not in self.db_ids["borrowed_books"]
+        ]
+        self.assertEqual(
+            Book.objects.filter(id__in=not_borrowed_books).borrowed().count(), 0
+        )
+
+    def test_qs_borrowed_returns_all_borrowed_books(self):
+        """
+        .borrowed() should result in all actively borrowed books
+        given data: all books
+        """
+        self.assertQuerySetEqual(
+            Book.objects.borrowed(),
+            Book.objects.filter(id__in=self.db_ids["borrowed_books"]),
+            ordered=False,
+        )
+
+    def test_qs_borrowed_returns_all_borrowed_books_from_borrowed_books(self):
+        """
+        .borrowed() should result in all actively borrowed books
+        given data: actively borrowed books
+        """
+        self.assertQuerySetEqual(
+            Book.objects.filter(id__in=self.db_ids["borrowed_books"]).borrowed(),
+            Book.objects.filter(id__in=self.db_ids["borrowed_books"]),
             ordered=False,
         )
 
