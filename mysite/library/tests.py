@@ -394,4 +394,82 @@ class BookClassTests(SetUpTestData):
                 self.assertEqual(e.is_available, condition)
 
 
-# TODO: create books, because authors() method is not working without it
+class RentClassTests(SetUpTestData):
+    """
+    Class for custom rent query set methods testing.
+    """
+
+    @classmethod
+    def setUpTestData(cls) -> None:
+        SetUpTestData.setup_database()
+
+    def test_qs_closed_returns_plain_qs(self):
+        """
+        .closed() returns plain qs
+        given data: open rents
+        """
+        self.assertEqual(
+            Rent.objects.filter(return_date__isnull=True).closed().count(), 0
+        )
+
+    def test_qs_closed_returns_closed(self):
+        """
+        .closed() returns all closed rents
+        given data: all rents
+        """
+        self.assertQuerySetEqual(
+            Rent.objects.closed(),
+            Rent.objects.filter(return_date__isnull=False),
+            ordered=False,
+        )
+
+    def test_qs_closed_returns_closed_from_closed(self):
+        """
+        .closed() returns all closed rents
+        given data: closed rents
+        """
+        self.assertQuerySetEqual(
+            Rent.objects.filter(return_date__isnull=False).closed(),
+            Rent.objects.filter(return_date__isnull=False),
+            ordered=False,
+        )
+
+    def test_qs_for_books(self):
+        """
+        .for_books() returns plain qs
+        given data: books without history and one plain field
+        """
+        not_borrowed_books = [
+            e
+            for e in range(1, Book.objects.count() + 1)
+            if e not in self.db_ids["borrowed_books"]
+        ]
+        for e in not_borrowed_books:
+            with self.subTest():
+                self.assertEqual(Rent.objects.for_books(e).count(), 0)
+
+    def test_qs_for_books_yield_appropriate_values(self):
+        """
+        .for_books() returns all rents for given book id
+        given data: all books
+        """
+
+        for e in range(1, Book.objects.count()):
+            with self.subTest():
+                self.assertQuerySetEqual(
+                    Rent.objects.for_books(e),
+                    Rent.objects.filter(book=e),
+                    ordered=False,
+                )
+
+    def test_qs_for_books_yield_appropriate_values_2(self):
+        """
+        .for_books() returns all rents for given book id
+        given data: all books with any rent
+        """
+        for e in self.db_ids["borrowed_books"]:
+            self.assertQuerySetEqual(
+                Rent.objects.for_books(e),
+                Rent.objects.filter(book=e),
+                ordered=False,
+            )

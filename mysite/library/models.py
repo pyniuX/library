@@ -177,12 +177,14 @@ class Rent(models.Model):
             Returns closed rents.
             """
             return self._by_return_date(False)
+            # tested
 
         def for_books(self, *book_ids: int):
             """
             Returns rent history of book with given id.
             """
             return self.filter(book__in=book_ids)
+            # tested
 
         def for_users(self, *user_ids: int):
             """
