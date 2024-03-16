@@ -389,7 +389,7 @@ class BookClassTests(SetUpTestData):
         given data: all books
         """
         for e in Book.objects.status():
-            condition = e.id in self.db_ids["borrowed_books"]
+            condition = e.id not in self.db_ids["borrowed_books"]
             with self.subTest():
                 self.assertEqual(e.is_available, condition)
 
