@@ -348,5 +348,40 @@ class BookClassTests(SetUpTestData):
             ordered=False,
         )
 
+    def test_qs_available_returns_plain_qs(self):
+        """
+        .available() should result in plaint qs
+        given data: all books that are  actively borrowed
+        """
+
+        self.assertEqual(
+            Book.objects.filter(id__in=self.db_ids["borrowed_books"])
+            .available()
+            .count(),
+            0,
+        )
+
+    def test_qs_available_returns_all_available_books(self):
+        """
+        .available() should result in all books available to borrow
+        given data: all books
+        """
+        self.assertQuerySetEqual(
+            Book.objects.available(),
+            Book.objects.exclude(id__in=self.db_ids["borrowed_books"]),
+            ordered=False,
+        )
+
+    def test_qs_available_returns_all_available_books_from_available_books(self):
+        """
+        .available() should result in all books available to borrow
+        given data: available books
+        """
+        self.assertQuerySetEqual(
+            Book.objects.exclude(id__in=self.db_ids["borrowed_books"]).available(),
+            Book.objects.exclude(id__in=self.db_ids["borrowed_books"]),
+            ordered=False,
+        )
+
 
 # TODO: create books, because authors() method is not working without it

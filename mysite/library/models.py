@@ -123,12 +123,14 @@ class Book(IsActive):
             Returns all books that are 'on shelf' and can be borrowed.
             """
             return self.exclude(id__in=self.borrowed())
+            # tested
 
         def borrowed(self):
             """
             Returns all books that are borrowed and hadn't been returned.
             """
             return self.filter(rent__return_date__isnull=True, rent__book__isnull=False)
+            # tested
 
     objects = BookQuerySet().as_manager()
 
