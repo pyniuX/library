@@ -383,5 +383,15 @@ class BookClassTests(SetUpTestData):
             ordered=False,
         )
 
+    def test_qs_status_returns_appropriate_values(self):
+        """
+        .status() should result in annotated is_available field with appropriate false/true values
+        given data: all books
+        """
+        for e in Book.objects.status():
+            condition = e.id in self.db_ids["borrowed_books"]
+            with self.subTest():
+                self.assertEqual(e.is_available, condition)
+
 
 # TODO: create books, because authors() method is not working without it
