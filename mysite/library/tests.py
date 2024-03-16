@@ -514,3 +514,34 @@ class RentClassTests(SetUpTestData):
                 Rent.objects.filter(user=e),
                 ordered=False,
             )
+
+    def test_qs_opened_returns_plain_qs(self):
+        """
+        .opened() returns plain qs
+        given data: closed rents
+        """
+        self.assertEqual(
+            Rent.objects.filter(return_date__isnull=False).opened().count(), 0
+        )
+
+    def test_qs_opened_returns_open(self):
+        """
+        .opened() returns all open rents
+        given data: all rents
+        """
+        self.assertQuerySetEqual(
+            Rent.objects.opened(),
+            Rent.objects.filter(return_date__isnull=True),
+            ordered=False,
+        )
+
+    def test_qs_opened_returns_opened_from_opened(self):
+        """
+        .opened() returns all open rents
+        given data: open rents
+        """
+        self.assertQuerySetEqual(
+            Rent.objects.filter(return_date__isnull=True).opened(),
+            Rent.objects.filter(return_date__isnull=True),
+            ordered=False,
+        )

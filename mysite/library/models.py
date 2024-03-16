@@ -191,6 +191,7 @@ class Rent(models.Model):
             Returns rent history of user with given id.
             """
             return self.filter(user__in=user_ids)
+            # tested
 
         def opened(self):
             """
