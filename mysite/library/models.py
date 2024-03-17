@@ -199,6 +199,18 @@ class Rent(models.Model):
             """
             return self._by_return_date(True)
 
+        def borrows_greater_than(self, date: datetime.date):
+            """
+            Returns all borrows greater than given date.
+            """
+            return self.filter(borrow_date__gt=date)
+
+        def borrows_less_than(self, date: datetime.date):
+            """
+            Returns all borrows less than given date.
+            """
+            return self.filter(borrow_date__lt=date)
+
     objects = RentQuerySet().as_manager()
 
     def __str__(self) -> str:
@@ -212,5 +224,5 @@ class Rent(models.Model):
 # DONE historia wypożyczeń użytkownika
 # DONE historia wypożyczeń książki
 # DONE pokaz autorów i książki
-# TODO: wypożyczenia z okresy
-# TODO: unittesty
+# DONE wypożyczenia z okresy
+# DONE unittesty

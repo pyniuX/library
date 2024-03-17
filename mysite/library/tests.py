@@ -114,39 +114,51 @@ class SetUpTestData(TestCase):
             Rent(
                 book=Book.objects.get(id=1),
                 user=Person.objects.get(id=1),
-                borrow_date=datetime.date(2023, 10, 4),
-                return_date=datetime.date(2023, 11, 6),
             ),
             # list_index = 1, db_id =  2
             Rent(
                 book=Book.objects.get(id=1),
                 user=Person.objects.get(id=5),
-                borrow_date=datetime.date(2024, 1, 4),
-                return_date=datetime.date(2024, 2, 2),
             ),
             # list_index = 2, db_id =  3
             Rent(
                 book=Book.objects.get(id=2),
                 user=Person.objects.get(id=3),
-                borrow_date=datetime.date(2024, 1, 18),
-                return_date=datetime.date(2024, 2, 6),
             ),
             # ongoing rents
             # list_index = 3, db_id =  4
             Rent(
                 book=Book.objects.get(id=1),
                 user=Person.objects.get(id=3),
-                borrow_date=datetime.date(2024, 3, 12),
             ),
             # list_index = 4, db_id =  5
             Rent(
                 book=Book.objects.get(id=2),
                 user=Person.objects.get(id=5),
-                borrow_date=datetime.date(2024, 3, 1),
             ),
         ]
+        borrow_dates = [
+            datetime.date(2023, 10, 4),
+            datetime.date(2024, 1, 17),
+            datetime.date(2024, 1, 18),
+            datetime.date(2024, 3, 12),
+            datetime.date(2024, 3, 1),
+        ]
+        return_dates = [
+            datetime.date(2023, 11, 6),
+            datetime.date(2024, 2, 2),
+            datetime.date(2024, 2, 6),
+        ]
+
+        licznik = 1
         for e in cls.list_rents:
             e.save()
+            e = Rent.objects.get(id=licznik)
+            e.borrow_date = borrow_dates[licznik - 1]
+            if licznik <= len(return_dates):
+                e.return_date = return_dates[licznik - 1]
+            e.save()
+            licznik += 1
 
         cls.users_with_any_rents = list(
             set(
@@ -545,3 +557,40 @@ class RentClassTests(SetUpTestData):
             Rent.objects.filter(return_date__isnull=True),
             ordered=False,
         )
+
+    def test_qs_borrows_greater_than_returns_plain_qs(self):
+        """
+        .borrows_greater_than() returns appropriate values
+        given data: all rents and data greater than any other
+        """
+        self.assertEqual(
+            Rent.objects.borrows_greater_than(datetime.date.today()).count(), 0
+        )
+
+    def test_qs_borrows_greater_than_returns_good_values(self):
+        """
+        .borrows_greater_than() returns appropriate values
+        given data: all rents and data in between other
+        """
+
+        for e in Rent.objects.borrows_greater_than(datetime.date(2024, 1, 17)):
+            with self.subTest():
+                self.assertFalse(e.borrow_date <= datetime.date(2024, 1, 17))
+
+    def test_qs_borrows_less_than_returns_plain_qs(self):
+        """
+        .borrows_less_than() returns appropriate values
+        given data: all rents and data less than any other
+        """
+        self.assertEqual(
+            Rent.objects.borrows_less_than(datetime.date(1999, 1, 1)).count(), 0
+        )
+
+    def test_qs_borrows_greater_than_returns_good_values(self):
+        """
+        .borrows_less_than() returns appropriate values
+        given data: all rents and data in between other
+        """
+        for e in Rent.objects.borrows_less_than(datetime.date(2024, 1, 18)):
+            with self.subTest():
+                self.assertFalse(e.borrow_date >= datetime.date(2024, 1, 18))
