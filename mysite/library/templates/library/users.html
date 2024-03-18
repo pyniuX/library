@@ -1,0 +1,26 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>users</title>
+</head>
+<thead>
+    <tr>
+      <th scope="col">User id</th>
+      <th scope="col">Most interest in</th>
+      <th scope="col">Age</th>
+    </tr>
+  </thead>
+<body>
+    <p style="font-size: large; text-align: center" >You're in users menu, shakalakamou!</p>
+    <ul>
+    {% for user in users_list %}
+        <li>{{ user.name }} -- {{ user.surname  }} </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
