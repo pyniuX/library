@@ -64,12 +64,12 @@ class Person(IsActive):
             """
             return self.annotate(
                 rents_count=models.Count("rent__book", filter=count_filter)
-            )
+            ).order_by(models.F("rents_count").desc())
             # tested
 
         def annotate_closed_rents_number(self):
             """
-            Returns number of closed rents for user in book_count field.
+            Returns number of closed rents for user in rents_count field.
             """
             return self.annotate_rents_number(
                 count_filter=models.Q(rent__in=Rent.objects.closed())
@@ -78,7 +78,7 @@ class Person(IsActive):
 
         def annotate_opened_rents_number(self):
             """
-            Returns number of ongoing rents for user in book_count field.
+            Returns number of ongoing rents for user in rents_count field.
             """
             return self.annotate_rents_number(
                 count_filter=models.Q(rent__in=Rent.objects.opened())
