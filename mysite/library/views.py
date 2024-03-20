@@ -1,7 +1,14 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+from django.views.generic.edit import CreateView
 
 from .models import Person
+
+
+class UserAddView(CreateView):
+    template_name = "library/user_add.html"
+    model = Person
+
+    fields = ["name", "second_name", "surname", "birth_date"]
 
 
 def index(request):
@@ -22,12 +29,14 @@ def users(request):
     return render(request, "library/users.html", context)
 
 
-def user_add(request):
-    return render(request, "library/index.html")
+def user_status(request, person_id):
+    user = get_object_or_404(Person, pk=person_id)
+    context = {"user": user}
+    return render(request, "library/user_status.html", context)
 
 
 def user_delete(request):
-    return render(request, "library/index.html")
+    return render(request, "library/user_delete.html")
 
 
 def books(request):

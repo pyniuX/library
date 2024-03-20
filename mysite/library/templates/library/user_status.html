@@ -1,0 +1,39 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user status</title>
+</head>
+<body>
+    <p style="font-size: large; text-align: center" >You are watching user:{{ user.name }}{{ user.surname }} , shakalakamou!</p>
+
+    <caption>User</caption>
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Second Name</th>
+          <th scope="col">Surname</th>
+          <th scope="col">Birth Date</th>          
+  
+
+        </tr>
+      </thead>
+      <tbody>
+   
+          <tr>
+            <th scope="row" >{{ user.id }}</th>
+            <td>{{ user.name }}</td>
+            <td>{{ user.second_name }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.birth_date }}</td>
+          </tr>
+       
+
+  
+</body>
+</html>
