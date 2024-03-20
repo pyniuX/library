@@ -15,7 +15,8 @@ urlpatterns = [
         name="user_add",
     ),
     path("people/users/<int:person_id>/", views.user_status, name="user_status"),
-    path("people/users/delete/", views.user_delete, name="user_delete"),
+    # path("people/users/delete/", views.user_delete, name="user_delete"),
     path("books/", views.books, name="books"),
     path("rents/", views.rents, name="rents"),
 ]
+# TODO: Person.objects.last is working only first time

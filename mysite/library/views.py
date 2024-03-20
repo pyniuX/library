@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.shortcuts import get_object_or_404, render
 from django.views.generic.edit import CreateView
 
@@ -9,6 +11,9 @@ class UserAddView(CreateView):
     model = Person
 
     fields = ["name", "second_name", "surname", "birth_date"]
+
+    def get_id():
+        return Person.objects.last().id + 1
 
 
 def index(request):
@@ -35,8 +40,11 @@ def user_status(request, person_id):
     return render(request, "library/user_status.html", context)
 
 
-def user_delete(request):
-    return render(request, "library/user_delete.html")
+# def user_delete(request, person_id):
+#     user = get_object_or_404(Person, pk=person_id)
+#     user.is_active = False
+#     user.save()
+#     return render(request, "library/users.html")
 
 
 def books(request):

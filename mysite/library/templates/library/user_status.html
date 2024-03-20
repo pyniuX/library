@@ -19,6 +19,7 @@
 </head>
 <body>
     <p style="font-size: large; text-align: center" >You are watching user: {{ user.name }}{{ user.surname }} , shakalakamou!</p>
+ 
     <table class="center">
         <caption>User</caption>
         <thead>
@@ -46,6 +47,6 @@
         </tfoot>
       </table>    
 
-  
+      <p style= "text-align: center" ><a href="{% url 'library:users' %}"><button>Go back to users</button></a></p>
 </body>
 </html>
