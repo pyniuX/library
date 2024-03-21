@@ -19,6 +19,7 @@
 </head>
 <body>
     <p style="font-size: large; text-align: center" >You are watching book: {{ book.title }}.</p>
+    
     <table class="center">
         <caption>Book</caption>
         <thead>
@@ -41,6 +42,7 @@
         <tfoot>
         </tfoot>
       </table>    
+      <p style= "text-align: center" ><a href="{% url 'library:book_delete' book.id%}"><button>Delete book</button></a></p>
       <p style= "text-align: center" ><a href="{% url 'library:books' %}"><button>Go back to books</button></a></p>
 </body>
 </html>

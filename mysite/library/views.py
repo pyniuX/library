@@ -10,15 +10,20 @@ from .models import Book, Person, Rent
 class UserAddView(CreateView):
     template_name = "library/user_add.html"
     model = Person
-
     fields = ["name", "second_name", "surname", "birth_date"]
 
 
 class AuthorAddView(CreateView):
     template_name = "library/author_add.html"
     model = Person
-
     fields = ["name", "second_name", "surname", "birth_date", "death_date", "is_active"]
+
+
+class BookAddView(CreateView):
+    template_name = "library/book_add.html"
+    model = Book
+
+    fields = ["title", "authors"]
 
 
 def index(request):
@@ -61,7 +66,7 @@ def user_delete(request, person_id):
 
 
 def books(request):
-    books_list = Book.objects.all().prefetch_related("authors")
+    books_list = Book.objects.all().active().prefetch_related("authors")
     context = {"books_list": books_list}
     return render(request, "library/books.html", context)
 
@@ -72,3 +77,10 @@ def book_status(request, book_id):
 
     context = {"book": book}
     return render(request, "library/book_status.html", context)
+
+
+def book_delete(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    book.is_active = False
+    book.save()
+    return redirect("/library/books/")

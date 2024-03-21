@@ -111,6 +111,20 @@ class Book(IsActive):
         Class for Book class  connected custom queryset methods.
         """
 
+        def active(self):
+            """
+            Returns book with is_active true: books existing in library.
+            """
+            return self.filter(is_active=True)
+            # not tested
+
+        def inactive(self):
+            """
+            Returns book with is_active false: books removed from library.
+            """
+            return self.filter(is_active=False)
+            # not  tested
+
         def status(self):
             """
             Returns if book is_available to rent for every book.

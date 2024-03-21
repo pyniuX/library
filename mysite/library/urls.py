@@ -23,5 +23,11 @@ urlpatterns = [
     path("people/users/<int:person_id>/", views.user_status, name="user_status"),
     path("people/users/<int:person_id>/delete/", views.user_delete, name="user_delete"),
     path("books/", views.books, name="books"),
+    path(
+        "books/add/",
+        views.BookAddView.as_view(success_url=f"../"),
+        name="book_add",
+    ),
     path("books/<int:book_id>/", views.book_status, name="book_status"),
+    path("books/<int:book_id>/delete/", views.book_delete, name="book_delete"),
 ]
