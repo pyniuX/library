@@ -1,9 +1,10 @@
 from typing import Any
 
+from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import CreateView
 
-from .models import Person
+from .models import Book, Person, Rent
 
 
 class UserAddView(CreateView):
@@ -41,7 +42,7 @@ def author_status(request, person_id):
 
 
 def users(request):
-    users_list = Person.objects.active().annotate_opened_rents_number()[:15]
+    users_list = Person.objects.active().annotate_opened_rents_number()
     context = {"users_list": users_list}
     return render(request, "library/users.html", context)
 
@@ -60,8 +61,14 @@ def user_delete(request, person_id):
 
 
 def books(request):
-    return render(request, "library/index.html")
+    books_list = Book.objects.all().prefetch_related("authors")
+    context = {"books_list": books_list}
+    return render(request, "library/books.html", context)
 
 
-def rents(request):
-    return render(request, "library/index.html")
+def book_status(request, book_id):
+    queryset = Book.objects.filter(id=book_id).status()
+    book = get_object_or_404(queryset)
+
+    context = {"book": book}
+    return render(request, "library/book_status.html", context)

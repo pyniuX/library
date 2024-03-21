@@ -1,0 +1,46 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>book status</title>
+       <style>
+      .center {
+      margin-left: auto;
+      margin-right: auto;}
+      table, th, td {
+        border: 1px solid;
+        border-collapse: collapse;
+      }
+  </style>
+</head>
+<body>
+    <p style="font-size: large; text-align: center" >You are watching book: {{ book.title }}.</p>
+    <table class="center">
+        <caption>Book</caption>
+        <thead>
+            <tr>
+            <th scope="col">id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Authors</th>
+            <th scope="col">Is available</th>
+            </tr>
+        </thead>
+        <tbody>
+    
+            <tr>
+                <th scope="row" >{{ book.id }}</th>
+                <td>{{ book.title }}</td>
+                <td>{{ book.authors.all }}</td>
+                <td>{{ book.is_available }}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>    
+      <p style= "text-align: center" ><a href="{% url 'library:books' %}"><button>Go back to books</button></a></p>
+</body>
+</html>
