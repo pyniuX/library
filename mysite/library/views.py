@@ -1,3 +1,4 @@
+import datetime
 from typing import Any
 
 from django.db.models import F
@@ -24,6 +25,13 @@ class BookAddView(CreateView):
     model = Book
 
     fields = ["title", "authors"]
+
+
+class RentAddView(CreateView):
+    template_name = "library/rent_add.html"
+    model = Rent
+
+    fields = ["book", "user"]
 
 
 def index(request):
@@ -74,7 +82,6 @@ def books(request):
 def book_status(request, book_id):
     queryset = Book.objects.filter(id=book_id).status()
     book = get_object_or_404(queryset)
-
     context = {"book": book}
     return render(request, "library/book_status.html", context)
 
@@ -90,3 +97,17 @@ def rents(request):
     rents_list = Rent.objects.all().prefetch_related("book", "user")
     context = {"rents_list": rents_list}
     return render(request, "library/rents.html", context)
+
+
+def rent_status(request, rent_id):
+    queryset = Rent.objects.filter(id=rent_id).prefetch_related("book", "user")
+    rent = get_object_or_404(queryset)
+    context = {"rent": rent}
+    return render(request, "library/rent_status.html", context)
+
+
+def rent_return(request, rent_id):
+    rent = get_object_or_404(Rent, pk=rent_id)
+    rent.return_date = datetime.date.today()
+    rent.save()
+    return redirect("/library/rents/")
