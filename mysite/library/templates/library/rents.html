@@ -1,0 +1,54 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rents</title>
+    <style>
+      .center {
+      margin-left: auto;
+      margin-right: auto;}
+      table, th, td {
+        border: 1px solid;
+        border-collapse: collapse;
+      }
+  </style>
+</head>
+<body>
+    <p style="font-size: large; text-align: center" >You're in rents menu, dalubidudabdab!</p>
+    <p style= "text-align: center" ><a href="{% url 'library:rent_add' %}"><button>Rent a book</button></a></p>
+    <p style= "text-align: center" ><a href="{% url 'library:index' %}"><button>Go back to main menu</button></a></p>
+    <p style= "text-align: center" ><a href="{% url 'library:index' %}"><button>Show finished</button></a></p>
+    <p style= "text-align: center" ><a href="{% url 'library:index' %}"><button>Show ongoing</button></a></p>
+    <table class="center">
+      <caption>
+        Rents
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">User</th>
+          <th scope="col">Book</th>
+          <th scope="col">Borrow Date</th>
+          <th scope="col">Return Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rents in rents_list %}
+          <tr>
+            <th scope="row" ><a href="{% url 'library:rent_status' rent.id %}">{{ rent.id }}</a></th>
+            <td>{{ rent.user }}</td>
+            <td>{{ rent.book }}</td>
+            <td>{{ rent.birth_date }}</td>
+            <td>{{ rent.return_date }}</td>
+          </tr>
+        {% endfor %} 
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>    
+</body>
+</html>

@@ -84,3 +84,9 @@ def book_delete(request, book_id):
     book.is_active = False
     book.save()
     return redirect("/library/books/")
+
+
+def rents(request):
+    rents_list = Rent.objects.all().prefetch_related("book", "user")
+    context = {"rents_list": rents_list}
+    return render(request, "library/rents.html", context)

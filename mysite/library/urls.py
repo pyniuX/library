@@ -30,4 +30,5 @@ urlpatterns = [
     ),
     path("books/<int:book_id>/", views.book_status, name="book_status"),
     path("books/<int:book_id>/delete/", views.book_delete, name="book_delete"),
+    path("rents/", views.rents, name="rents"),
 ]
