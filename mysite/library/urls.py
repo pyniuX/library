@@ -8,6 +8,12 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("people/", views.people, name="people"),
     path("people/authors/", views.authors, name="authors"),
+    path(
+        "people/authors/add/",
+        views.AuthorAddView.as_view(success_url=f"../"),
+        name="author_add",
+    ),
+    path("people/authors/<int:person_id>/", views.author_status, name="author_status"),
     path("people/users/", views.users, name="users"),
     path(
         "people/users/add/",

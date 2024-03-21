@@ -12,8 +12,12 @@ class UserAddView(CreateView):
 
     fields = ["name", "second_name", "surname", "birth_date"]
 
-    def get_id():
-        return Person.objects.last().id + 1
+
+class AuthorAddView(CreateView):
+    template_name = "library/author_add.html"
+    model = Person
+
+    fields = ["name", "second_name", "surname", "birth_date", "death_date", "is_active"]
 
 
 def index(request):
@@ -25,7 +29,15 @@ def people(request):
 
 
 def authors(request):
-    return render(request, "library/index.html")
+    authors_list = Person.objects.authors()
+    context = {"authors_list": authors_list}
+    return render(request, "library/authors.html", context)
+
+
+def author_status(request, person_id):
+    author = get_object_or_404(Person, pk=person_id)
+    context = {"author": author}
+    return render(request, "library/author_status.html", context)
 
 
 def users(request):
