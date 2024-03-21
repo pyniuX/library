@@ -11,12 +11,11 @@ urlpatterns = [
     path("people/users/", views.users, name="users"),
     path(
         "people/users/add/",
-        views.UserAddView.as_view(success_url=f"../{Person.objects.last().id+1}/"),
+        views.UserAddView.as_view(success_url=f"../"),
         name="user_add",
     ),
     path("people/users/<int:person_id>/", views.user_status, name="user_status"),
-    # path("people/users/delete/", views.user_delete, name="user_delete"),
+    path("people/users/<int:person_id>/delete/", views.user_delete, name="user_delete"),
     path("books/", views.books, name="books"),
     path("rents/", views.rents, name="rents"),
 ]
-# TODO: Person.objects.last is working only first time

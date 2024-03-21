@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import CreateView
 
 from .models import Person
@@ -40,11 +40,11 @@ def user_status(request, person_id):
     return render(request, "library/user_status.html", context)
 
 
-# def user_delete(request, person_id):
-#     user = get_object_or_404(Person, pk=person_id)
-#     user.is_active = False
-#     user.save()
-#     return render(request, "library/users.html")
+def user_delete(request, person_id):
+    user = get_object_or_404(Person, pk=person_id)
+    user.is_active = False
+    user.save()
+    return redirect("/library/people/users/")
 
 
 def books(request):

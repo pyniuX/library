@@ -18,8 +18,7 @@
   </style>
 </head>
 <body>
-    <p style="font-size: large; text-align: center" >You are watching user: {{ user.name }}{{ user.surname }} , shakalakamou!</p>
- 
+    <p style="font-size: large; text-align: center" >You are watching user: {{ user.name }}{{ user.surname }}.</p>
     <table class="center">
         <caption>User</caption>
         <thead>
@@ -46,7 +45,7 @@
         <tfoot>
         </tfoot>
       </table>    
-
+      <p style= "text-align: center" ><a href="{% url 'library:user_delete' user.id%}"><button>Delete user</button></a></p>
       <p style= "text-align: center" ><a href="{% url 'library:users' %}"><button>Go back to users</button></a></p>
 </body>
 </html>
