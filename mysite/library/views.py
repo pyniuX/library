@@ -5,6 +5,7 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import CreateView
 
+from .forms import AuthorForm, BookForm
 from .models import Book, Person, Rent
 
 
@@ -52,6 +53,20 @@ def author_status(request, person_id):
     author = get_object_or_404(Person, pk=person_id)
     context = {"author": author}
     return render(request, "library/author_status.html", context)
+
+
+def author_add(request):
+    author_form = AuthorForm()
+    book_form = BookForm()
+    context = {"book_form": book_form, "author_form": author_form}
+    return render(request, "library/author_add.html", context)
+
+
+def book_add(request):
+    context = {}
+    form = BookForm()
+    context["form"] = form
+    return render(request, "library/book_add.html", context)
 
 
 def users(request):
@@ -111,3 +126,6 @@ def rent_return(request, rent_id):
     rent.return_date = datetime.date.today()
     rent.save()
     return redirect("/library/rents/")
+
+
+# TODO: dodawanie autorów nie obsługuje dwóch aturór dla jednej książki
