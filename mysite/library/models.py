@@ -1,6 +1,8 @@
 import datetime
 
+from django.forms import ModelForm
 from django.db import models
+
 
 
 class IsActive(models.Model):
@@ -230,13 +232,5 @@ class Rent(models.Model):
     def __str__(self) -> str:
         return f"Book:{self.book_id} borrowed by user:{self.user_id}"
 
-
-# DONE wyszukaj książkę: status książki z punktu widzenia użytkownika
-# DONE wyszukaj użytkownika z informacją: status wypożyczeń
-# DONE książki w aktywnym wypożyczeniu,
-# DONE książki dostępne do wypożyczenia
-# DONE historia wypożyczeń użytkownika
-# DONE historia wypożyczeń książki
-# DONE pokaz autorów i książki
-# DONE wypożyczenia z okresy
-# DONE unittesty
+class PersonModelForm(ModelForm):
+    

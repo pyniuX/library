@@ -3,8 +3,8 @@ from django.db.models import F
 
 from .models import Book, Person, Rent
 
-admin.site.register(Person)
-admin.site.register(Book)
+# admin.site.register(Person)
+# admin.site.register(Book)
 # admin.site.register(Rent)
 
 
@@ -17,4 +17,20 @@ class RentAdmin(admin.ModelAdmin):
     ]
 
 
+class OwnershipInline(admin.TabularInline):
+    model = Book.authors.through
+    extra = 1
+
+
+class PersonAdmin(admin.ModelAdmin):
+    inlines = [OwnershipInline]
+
+
+class BookAdmin(admin.ModelAdmin):
+    inlines = [OwnershipInline]
+    exclude = ["authors"]
+
+
 admin.site.register(Rent, RentAdmin)
+admin.site.register(Book, BookAdmin)
+admin.site.register(Person, PersonAdmin)
