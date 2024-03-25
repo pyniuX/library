@@ -162,7 +162,8 @@ def rent_return(request, rent_id):
     return redirect("/library/rents/")
 
 
-# TODO: dodawanie autorów nie obsługuje dwóch aturór dla jednej książki
+# TODO:  w błedzie formularz nie powinien być zerowany
+# TODO: lista ksiazek w authors ma byc wyswietlana w nowej lini bez przecinka w ostatnim(lub w ogóle bez)
 # TODO: logowanie  - link na chacie
 # TODO: deployment django girls
 # TODO: wyglad
