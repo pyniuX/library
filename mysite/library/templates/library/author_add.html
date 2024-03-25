@@ -9,10 +9,14 @@
 <body>
  
     <form  method="post">
+       
+        <p style="font-size: large" >Fill author data (second name and death date are not obligatory).</p>
+        {{ author_form.as_p }}
+        <br/>
+        <p style="font-size: large" >You need to add at least one book for a new author.</p>
+        <p style="font-size: large" >Fill book data</p>
         {% csrf_token %}
         {{ book_form.as_p }}
-        <br/>
-        {{ author_form.as_p }}
         <input type="submit" value="Save">
     </form >
 

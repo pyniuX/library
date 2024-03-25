@@ -50,9 +50,10 @@ def authors(request):
 
 
 def author_status(request, person_id):
-    queryset = Person.objects.filter(id=person_id)
-    author = get_object_or_404(queryset)
-    context = {"author": author}
+    author = get_object_or_404(Person, pk=person_id)
+    books = Person.objects.get(id=person_id).book_set.values("title").distinct()
+
+    context = {"author": author, "books": books}
     return render(request, "library/author_status.html", context)
 
 
@@ -74,6 +75,12 @@ def author_add(request):
             book.save()
             book.authors.add(author.id)
             return redirect("/library/people/authors/")
+        else:
+            # TODO: komunikat błedu i return
+            author_form = AuthorForm()
+            book_form = BookInAuthorForm()
+            context = {"book_form": book_form, "author_form": author_form}
+            return render(request, "library/author_add.html", context)
     else:
         author_form = AuthorForm()
         book_form = BookInAuthorForm()
