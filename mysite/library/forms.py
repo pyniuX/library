@@ -20,3 +20,9 @@ class BookForm(ModelForm):
     class Meta:
         model = Book
         fields = ["authors", "title"]
+
+
+class BookInAuthorForm(ModelForm):
+    class Meta:
+        model = Book
+        fields = ["title"]

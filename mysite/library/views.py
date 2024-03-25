@@ -5,7 +5,7 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import CreateView
 
-from .forms import AuthorForm, BookForm
+from .forms import AuthorForm, BookForm, BookInAuthorForm
 from .models import Book, Person, Rent
 
 
@@ -50,23 +50,50 @@ def authors(request):
 
 
 def author_status(request, person_id):
-    author = get_object_or_404(Person, pk=person_id)
+    queryset = Person.objects.filter(id=person_id)
+    author = get_object_or_404(queryset)
     context = {"author": author}
     return render(request, "library/author_status.html", context)
 
 
 def author_add(request):
-    author_form = AuthorForm()
-    book_form = BookForm()
-    context = {"book_form": book_form, "author_form": author_form}
-    return render(request, "library/author_add.html", context)
+    if request.method == "POST":
+        author_form = AuthorForm(request.POST)
+        book_form = BookInAuthorForm(request.POST)
+        if book_form.is_valid() and author_form.is_valid():
+            author = Person(
+                name=author_form.cleaned_data["name"],
+                second_name=author_form.cleaned_data["second_name"],
+                surname=author_form.cleaned_data["surname"],
+                birth_date=author_form.cleaned_data["birth_date"],
+                death_date=author_form.cleaned_data["death_date"],
+                is_active=author_form.cleaned_data["is_active"],
+            )
+            author.save()
+            book = Book(title=book_form.cleaned_data["title"])
+            book.save()
+            book.authors.add(author.id)
+            return redirect("/library/people/authors/")
+    else:
+        author_form = AuthorForm()
+        book_form = BookInAuthorForm()
+        context = {"book_form": book_form, "author_form": author_form}
+        return render(request, "library/author_add.html", context)
 
 
 def book_add(request):
-    context = {}
-    form = BookForm()
-    context["form"] = form
-    return render(request, "library/book_add.html", context)
+    if request.method == "POST":
+        book_form = BookForm(request.POST)
+        if book_form.is_valid():
+            book = Book(title=book_form.cleaned_data["title"])
+            book.save()
+            for author in book_form.cleaned_data["authors"]:
+                book.authors.add(author.id)
+            return redirect("/library/books/")
+    else:
+        book_form = BookForm()
+        context = {"book_form": book_form}
+        return render(request, "library/book_add.html", context)
 
 
 def users(request):
@@ -129,3 +156,6 @@ def rent_return(request, rent_id):
 
 
 # TODO: dodawanie autorów nie obsługuje dwóch aturór dla jednej książki
+# TODO: logowanie  - link na chacie
+# TODO: deployment django girls
+# TODO: wyglad

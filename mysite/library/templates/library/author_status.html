@@ -42,6 +42,10 @@
                 <td>{{ author.surname }}</td>
                 <td>{{ author.birth_date }}</td>
                 <td>{{ author.death_date }}</td>
+                <td>{% for book in author.books.all %}
+                    {{book}}, 
+                    {% endfor %}  
+                </td>
             </tr>
         </tbody>
         <tfoot>

@@ -37,7 +37,7 @@
           <tr>
             <th scope="row" ><a href="{% url 'library:book_status' book.id %}">{{ book.id }}</a></th>
             <td>{% for author in book.authors.all %}
-                {{author}}
+                {{author}}, 
                 {% endfor %}  
             </td>
             <td>{{ book.title }}</td>
