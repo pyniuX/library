@@ -1,6 +1,7 @@
 import datetime
 from typing import Any
 
+from django.contrib import messages
 from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import CreateView
@@ -52,7 +53,6 @@ def authors(request):
 def author_status(request, person_id):
     author = get_object_or_404(Person, pk=person_id)
     books = Person.objects.get(id=person_id).book_set.values("title").distinct()
-
     context = {"author": author, "books": books}
     return render(request, "library/author_status.html", context)
 
@@ -76,9 +76,9 @@ def author_add(request):
             book.authors.add(author.id)
             return redirect("/library/people/authors/")
         else:
-            # TODO: komunikat błedu i return
             author_form = AuthorForm()
             book_form = BookInAuthorForm()
+            messages.error(request, "Wrong data, validation error, try again.")
             context = {"book_form": book_form, "author_form": author_form}
             return render(request, "library/author_add.html", context)
     else:
