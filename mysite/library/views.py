@@ -1,8 +1,6 @@
 import datetime
-from typing import Any
 
 from django.contrib import messages
-from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import CreateView
 
@@ -76,8 +74,8 @@ def author_add(request):
             book.authors.add(author.id)
             return redirect("/library/people/authors/")
         else:
-            author_form = AuthorForm()
-            book_form = BookInAuthorForm()
+            author_form = AuthorForm(data=request.POST)
+            book_form = BookInAuthorForm(data=request.POST)
             messages.error(request, "Wrong data, validation error, try again.")
             context = {"book_form": book_form, "author_form": author_form}
             return render(request, "library/author_add.html", context)
@@ -162,8 +160,8 @@ def rent_return(request, rent_id):
     return redirect("/library/rents/")
 
 
-# TODO:  w błedzie formularz nie powinien być zerowany
-# TODO: lista ksiazek w authors ma byc wyswietlana w nowej lini bez przecinka w ostatnim(lub w ogóle bez)
+# DONE:  w błedzie formularz nie powinien być zerowany
+# DONE: lista ksiazek w authors ma byc wyswietlana w nowej lini bez przecinka w ostatnim(lub w ogóle bez)
 # TODO: logowanie  - link na chacie
 # TODO: deployment django girls
 # TODO: wyglad
