@@ -1,7 +1,9 @@
 import datetime
 
 from django.contrib import messages
+from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView
 
 from .forms import AuthorForm, BookForm, BookInAuthorForm
@@ -34,7 +36,13 @@ class RentAddView(CreateView):
     fields = ["book", "user"]
 
 
+class LoginView(LoginView):
+    template_name = "library/login.html"
+    next_page = reverse_lazy("library:index")
+
+
 def index(request):
+
     return render(request, "library/index.html")
 
 
@@ -72,7 +80,7 @@ def author_add(request):
             book = Book(title=book_form.cleaned_data["title"])
             book.save()
             book.authors.add(author.id)
-            return redirect("/library/people/authors/")
+            return redirect(reverse("library:authors"))
         else:
             author_form = AuthorForm(data=request.POST)
             book_form = BookInAuthorForm(data=request.POST)
@@ -94,7 +102,7 @@ def book_add(request):
             book.save()
             for author in book_form.cleaned_data["authors"]:
                 book.authors.add(author.id)
-            return redirect("/library/books/")
+            return redirect(reverse("library:books"))
     else:
         book_form = BookForm()
         context = {"book_form": book_form}
@@ -117,7 +125,7 @@ def user_delete(request, person_id):
     user = get_object_or_404(Person, pk=person_id)
     user.is_active = False
     user.save()
-    return redirect("/library/people/users/")
+    return redirect(reverse("library:users"))
 
 
 def books(request):
@@ -137,7 +145,7 @@ def book_delete(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     book.is_active = False
     book.save()
-    return redirect("/library/books/")
+    return redirect(reverse("library:books"))
 
 
 def rents(request):
@@ -157,11 +165,12 @@ def rent_return(request, rent_id):
     rent = get_object_or_404(Rent, pk=rent_id)
     rent.return_date = datetime.date.today()
     rent.save()
-    return redirect("/library/rents/")
+    return redirect(reverse("library:rents"))
 
 
 # DONE:  w błedzie formularz nie powinien być zerowany
 # DONE: lista ksiazek w authors ma byc wyswietlana w nowej lini bez przecinka w ostatnim(lub w ogóle bez)
+# DONE: pouzywac nazw urlów
 # TODO: logowanie  - link na chacie
 # TODO: deployment django girls
 # TODO: wyglad

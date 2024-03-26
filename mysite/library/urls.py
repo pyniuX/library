@@ -1,43 +1,80 @@
-from django.urls import path
+from django.contrib.auth.decorators import login_required
+from django.urls import path, reverse_lazy
 from library import views
-
-from .models import Person
 
 app_name = "library"
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("people/", views.people, name="people"),
-    path("people/authors/", views.authors, name="authors"),
-    # path(
-    #     "people/authors/add/",
-    #     views.AuthorAddView.as_view(success_url="../"),
-    #     name="author_add",
-    # ),
-    path("people/authors/add/", views.author_add, name="author_add"),
-    path("people/authors/<int:person_id>/", views.author_status, name="author_status"),
-    path("people/users/", views.users, name="users"),
+    path("", login_required(views.index), name="index"),
+    path(
+        "people/",
+        login_required(views.people),
+        name="people",
+    ),
+    path(
+        "people/authors/",
+        login_required(views.authors),
+        name="authors",
+    ),
+    path(
+        "people/authors/add/",
+        login_required(views.author_add),
+        name="author_add",
+    ),
+    path(
+        "people/authors/<int:person_id>/",
+        login_required(views.author_status),
+        name="author_status",
+    ),
+    path("people/users/", login_required(views.users), name="users"),
     path(
         "people/users/add/",
-        views.UserAddView.as_view(success_url="../"),
+        login_required(
+            views.UserAddView.as_view(success_url=reverse_lazy("library:users"))
+        ),
         name="user_add",
     ),
-    path("people/users/<int:person_id>/", views.user_status, name="user_status"),
-    path("people/users/<int:person_id>/delete/", views.user_delete, name="user_delete"),
-    path("books/", views.books, name="books"),
-    # path(
-    #     "books/add/",
-    #     views.BookAddView.as_view(success_url="../"),
-    #     name="book_add",
-    # ),
-    path("books/add/", views.book_add, name="book_add"),
-    path("books/<int:book_id>/", views.book_status, name="book_status"),
-    path("books/<int:book_id>/delete/", views.book_delete, name="book_delete"),
-    path("rents/", views.rents, name="rents"),
+    path(
+        "people/users/<int:person_id>/",
+        login_required(views.user_status),
+        name="user_status",
+    ),
+    path(
+        "people/users/<int:person_id>/delete/",
+        login_required(views.user_delete),
+        name="user_delete",
+    ),
+    path("books/", login_required(views.books), name="books"),
+    path(
+        "books/add/",
+        login_required(views.book_add),
+        name="book_add",
+    ),
+    path(
+        "books/<int:book_id>/",
+        login_required(views.book_status),
+        name="book_status",
+    ),
+    path(
+        "books/<int:book_id>/delete/",
+        login_required(views.book_delete),
+        name="book_delete",
+    ),
+    path("rents/", login_required(views.rents), name="rents"),
     path(
         "rents/add/",
-        views.RentAddView.as_view(success_url="../"),
+        login_required(
+            views.RentAddView.as_view(success_url=reverse_lazy("library:rents"))
+        ),
         name="rent_add",
     ),
-    path("rents/<int:rent_id>/", views.rent_status, name="rent_status"),
-    path("rents/<int:rent_id>/return/", views.rent_return, name="rent_return"),
+    path(
+        "rents/<int:rent_id>/",
+        login_required(views.rent_status),
+        name="rent_status",
+    ),
+    path(
+        "rents/<int:rent_id>/return/",
+        login_required(views.rent_return),
+        name="rent_return",
+    ),
 ]

@@ -18,10 +18,12 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
+from library.views import LoginView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("library/", include("library.urls")),
+    path("accounts/login/", LoginView.as_view(), name="login"),
 ]
 
 if settings.DEBUG:
