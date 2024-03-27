@@ -2,49 +2,49 @@
 {% block title %}
     author status
 {% endblock title%}
+
 {% block head %}
-    <style>
-        .center {
-        margin-left: auto;
-        margin-right: auto;}
-        table, th, td {
-        border: 1px solid;
-        border-collapse: collapse;
-        }
-    </style>
+  {% include "library/extensions/style_table.html" %}
 {% endblock head %}
+
 {% block content %}
     <p style="font-size: large; text-align: center" >You are watching author: {{ author.name }}{{ author.surname }}.</p>
-    <table class="center">
-        <caption>Author</caption>
-        <thead>
-            <tr>
-            <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Second Name</th>
-            <th scope="col">Surname</th>
-            <th scope="col">Birth Date</th>          
-            <th scope="col">Death Date</th>       
-            <th scope="col">Books</th>       
+    <div id="author" class="padded">
+        <table class="center ; table table-condensed">
+            <caption>Author</caption>
+            <thead>
+                <tr>
+                <th scope="col">id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Second Name</th>
+                <th scope="col">Surname</th>
+                <th scope="col">Birth Date</th>          
+                <th scope="col">Death Date</th>       
+                <th scope="col">Books</th>       
 
-            </tr>
-        </thead>
-        <tbody>
+                </tr>
+            </thead>
+            <tbody>
 
-            <tr>
-                <th scope="row" >{{ author.id }}</th>
-                <td>{{ author.name }}</td>
-                <td>{{ author.second_name }}</td>
-                <td>{{ author.surname }}</td>
-                <td>{{ author.birth_date }}</td>
-                <td>{{ author.death_date }}</td>
-                <td>{% for book in books %}
-                    {% if  forloop.last %} 
-                        {{ book.title }} 
-                    {% else %}
-                        {{ book.title }}, <br/>
-                    {% endif %}
-                    {% endfor %}  
-                </td>
-            </tr>
+                <tr>
+                    <th scope="row" >{{ author.id }}</th>
+                    <td>{{ author.name }}</td>
+                    <td>{{ author.second_name }}</td>
+                    <td>{{ author.surname }}</td>
+                    <td>{{ author.birth_date }}</td>
+                    <td>{{ author.death_date }}</td>
+                    <td>{% for book in books %}
+                        {% if  forloop.last %} 
+                            {{ book.title }} 
+                        {% else %}
+                            {{ book.title }}, <br/>
+                        {% endif %}
+                        {% endfor %}  
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>    
+    </div>
 {% endblock content %}

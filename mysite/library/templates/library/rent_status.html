@@ -4,42 +4,36 @@
 {% endblock title %}
 
 {% block head %}
-    <style>
-        .center {
-        margin-left: auto;
-        margin-right: auto;}
-        table, th, td {
-        border: 1px solid;
-        border-collapse: collapse;
-        }
-    </style>
+  {% include "library/extensions/style_table.html" %}
 {% endblock head %}
 
 {% block content %}
     <p style="font-size: large; text-align: center" >You are watching book: {{ rent.book }} rented by {{ rent.user }}.</p>
-    <table class="center">
-        <caption>Rent</caption>
-        <thead>
-            <tr>
-            <th scope="col">id</th>
-            <th scope="col">User</th>
-            <th scope="col">Book</th>
-            <th scope="col">borrow_date</th>
-            <th scope="col">return_date</th>          
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row" >{{ rent.id }}</th>
-                <td>{{ rent.user }}</td>
-                <td>{{ rent.book }}</td>
-                <td>{{ rent.borrow_date }}</td>
-                <td>{{ rent.return_date }}</td>
-            </tr>
-        </tbody>
-        <tfoot>
-        </tfoot>
-    </table>    
+    <div id="rent" class="padded">
+        <table class="center ; table table-condensed">
+            <caption>Rent</caption>
+            <thead>
+                <tr>
+                <th scope="col">id</th>
+                <th scope="col">User</th>
+                <th scope="col">Book</th>
+                <th scope="col">borrow_date</th>
+                <th scope="col">return_date</th>          
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row" >{{ rent.id }}</th>
+                    <td>{{ rent.user }}</td>
+                    <td>{{ rent.book }}</td>
+                    <td>{{ rent.borrow_date }}</td>
+                    <td>{{ rent.return_date }}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>    
+    </div>
     <p style= "text-align: center" ><a href="{% url 'library:rents' %}"><button>Go back to rents</button></a></p>
     <p style= "text-align: center" ><a href="{% url 'library:rent_return' rent.id %}"><button>Finish rent</button></a></p>
 {% endblock content %}
