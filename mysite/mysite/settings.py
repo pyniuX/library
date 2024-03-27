@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "library.apps.LibraryConfig",
     "debug_toolbar",
+    "bootstrap3",
 ]
 
 if DEBUG:
@@ -132,3 +133,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 # jeszcze mniejsza zmiana
+BOOTSTRAP3 = {
+    "include_jquery": True,
+}

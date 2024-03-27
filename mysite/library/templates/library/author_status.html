@@ -43,13 +43,11 @@
                 <td>{{ author.birth_date }}</td>
                 <td>{{ author.death_date }}</td>
                 <td>{% for book in books %}
-                        
                     {% if  forloop.last %} 
                         {{ book.title }} 
                     {% else %}
                         {{ book.title }}, <br/>
                     {% endif %}
-                       
                     {% endfor %}  
                 </td>
             </tr>

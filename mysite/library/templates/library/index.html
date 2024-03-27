@@ -1,21 +1,13 @@
+{% extends 'library/extensions/base.html' %}
+{% block title %}
+    main menu
+{% endblock %}
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>main menu</title>
-    
-</head>
-<body>
+{% block content %}
     <h1 style="font-size: large; text-align: center" >Hello, welcome in out library!!!</h1>
     <p style="font-size: large; text-align: center" > <a href="{% url 'library:people'  %}"><button>Go to people</button></a></p>
     <p style="font-size: large; text-align: center" > <a href="{% url 'library:books'  %}"><button>Go to books</button></a></p>
     <p style="font-size: large; text-align: center" > <a href="{% url 'library:rents'  %}"><button>Go to rents</button></a></p>
     <img src="../../static/library/images/books_stack.jpg" alt="image not loaded: books_stack">
     <img src="../../static/library/images/nerd_face.jpg" alt="image not loaded: nerd_face" >
-
-</body>
-</html>
+{% endblock %}
