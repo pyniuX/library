@@ -20,6 +20,7 @@
           <th scope="col">id</th>
           <th scope="col">Authors</th>
           <th scope="col">Title</th>
+          <th scope="col">Id available</th>
         </tr>
       </thead>
       <tbody>
@@ -31,6 +32,7 @@
                 {% endfor %}  
             </td>
             <td>{{ book.title }}</td>
+            <td>{{ book.is_available }}</td>
           </tr>
         {% endfor %} 
       </tbody>

@@ -16,19 +16,6 @@ class UserAddView(CreateView):
     fields = ["name", "second_name", "surname", "birth_date"]
 
 
-class AuthorAddView(CreateView):
-    template_name = "library/author_add.html"
-    model = Person
-    fields = ["name", "second_name", "surname", "birth_date", "death_date", "is_active"]
-
-
-class BookAddView(CreateView):
-    template_name = "library/book_add.html"
-    model = Book
-
-    fields = ["title", "authors"]
-
-
 class RentAddView(CreateView):
     template_name = "library/rent_add.html"
     model = Rent
@@ -130,7 +117,7 @@ def user_delete(request, person_id):
 
 
 def books(request):
-    books = Book.objects.all().active().prefetch_related("authors")
+    books = Book.objects.all().active().prefetch_related("authors").status()
     context = {"books": books}
     return render(request, "library/books.html", context)
 
@@ -150,7 +137,9 @@ def book_delete(request, book_id):
 
 
 def rents(request):
-    rents_list = Rent.objects.all().prefetch_related("book", "user")
+    rents_list = (
+        Rent.objects.all().prefetch_related("book", "user").order_by("return_date")
+    )
     context = {"rents_list": rents_list}
     return render(request, "library/rents.html", context)
 
