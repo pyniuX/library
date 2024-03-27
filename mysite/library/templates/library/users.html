@@ -1,50 +1,47 @@
+{% extends 'library/extensions/base.html' %}
+{% block title %}
+    main menu
+{% endblock title %}
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>users</title>
-    <style>
-      .center {
-      margin-left: auto;
-      margin-right: auto;}
-      table, th, td {
-        border: 1px solid;
-        border-collapse: collapse;
-      }
+{% block head %}
+  <style>
+    .center {
+    margin-left: auto;
+    margin-right: auto;}
+    table, th, td {
+      border: 1px solid;
+      border-collapse: collapse;
+    }
   </style>
-</head>
-<body>
-    <p style="font-size: large; text-align: center" >You're in users menu, shakalakamou!</p>
-    <p style= "text-align: center" ><a href="{% url 'library:user_add' %}"><button>Add user</button></a></p>
-    <p style= "text-align: center" ><a href="{% url 'library:people' %}"><button>Go back to people</button></a></p>
-    <table class="center">
-      <caption>
-        Active users
-      </caption>
-      <thead>
+  {% endblock head %}
+
+{% block content %}
+  <p style="font-size: large; text-align: center" >You're in users menu, shakalakamou!</p>
+  <p style= "text-align: center" ><a href="{% url 'library:user_add' %}"><button>Add user</button></a></p>
+
+  <table class="center">
+    <caption>
+      Active users
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Ongoing rents</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users_list %}
         <tr>
-          <th scope="col">id</th>
-          <th scope="col">Name</th>
-          <th scope="col">Surname</th>
-          <th scope="col">Ongoing rents</th>
+          <th scope="row" ><a href="{% url 'library:user_status' user.id %}">{{ user.id }}</a></th>
+          <td>{{ user.name }}</td>
+          <td>{{ user.surname }}</td>
+          <td>{{ user.rents_count }}</td>
         </tr>
-      </thead>
-      <tbody>
-        {% for user in users_list %}
-          <tr>
-            <th scope="row" ><a href="{% url 'library:user_status' user.id %}">{{ user.id }}</a></th>
-            <td>{{ user.name }}</td>
-            <td>{{ user.surname }}</td>
-            <td>{{ user.rents_count }}</td>
-          </tr>
-        {% endfor %} 
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>    
-</body>
-</html>
+      {% endfor %} 
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>    
+{% endblock content %}

@@ -1,23 +1,21 @@
+{% extends 'library/extensions/base.html' %}
+{% block title %}
+    rent status
+{% endblock title %}
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rent status</title>
-       <style>
-      .center {
-      margin-left: auto;
-      margin-right: auto;}
-      table, th, td {
+{% block head %}
+    <style>
+        .center {
+        margin-left: auto;
+        margin-right: auto;}
+        table, th, td {
         border: 1px solid;
         border-collapse: collapse;
-      }
-  </style>
-</head>
-<body>
+        }
+    </style>
+{% endblock head %}
+
+{% block content %}
     <p style="font-size: large; text-align: center" >You are watching book: {{ rent.book }} rented by {{ rent.user }}.</p>
     <table class="center">
         <caption>Rent</caption>
@@ -41,8 +39,7 @@
         </tbody>
         <tfoot>
         </tfoot>
-      </table>    
-      <p style= "text-align: center" ><a href="{% url 'library:rents' %}"><button>Go back to rents</button></a></p>
-      <p style= "text-align: center" ><a href="{% url 'library:rent_return' rent.id %}"><button>Finish rent</button></a></p>
-</body>
-</html>
+    </table>    
+    <p style= "text-align: center" ><a href="{% url 'library:rents' %}"><button>Go back to rents</button></a></p>
+    <p style= "text-align: center" ><a href="{% url 'library:rent_return' rent.id %}"><button>Finish rent</button></a></p>
+{% endblock content %}

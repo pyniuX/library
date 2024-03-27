@@ -1,28 +1,23 @@
+{% extends 'library/extensions/base.html' %}
+{% block title %}
+    author add
+{% endblock title %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>author add</title>
-</head>
-<body>
+{% block content %}
     {% for message in messages %}
-    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-      <strong>Message: </strong> {{message}}
-    </div>
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+        <strong>Message: </strong> {{message}}
+        </div>
     {% endfor %}
     <form  method="post">
-       
-        <p style="font-size: large" >Fill author data (second name and death date are not obligatory).</p>
-        {{ author_form.as_p }}
-        <br/>
-        <p style="font-size: large" >You need to add at least one book for a new author.</p>
-        <p style="font-size: large" >Fill book data</p>
-        {% csrf_token %}
-        {{ book_form.as_p }}
-        <input type="submit" value="Save">
+    
+    <p style="font-size: large" >Fill author data (second name and death date are not obligatory).</p>
+    {{ author_form.as_p }}
+    <br/>
+    <p style="font-size: large" >You need to add at least one book for a new author.</p>
+    <p style="font-size: large" >Fill book data</p>
+    {% csrf_token %}
+    {{ book_form.as_p }}
+    <input type="submit" value="Save">
     </form >
-
-</body>
-</html>
+{% endblock content %}

@@ -6,40 +6,35 @@ app_name = "library"
 urlpatterns = [
     path("", login_required(views.index), name="index"),
     path(
-        "people/",
-        login_required(views.people),
-        name="people",
-    ),
-    path(
-        "people/authors/",
+        "authors/",
         login_required(views.authors),
         name="authors",
     ),
     path(
-        "people/authors/add/",
+        "authors/add/",
         login_required(views.author_add),
         name="author_add",
     ),
     path(
-        "people/authors/<int:person_id>/",
+        "authors/<int:person_id>/",
         login_required(views.author_status),
         name="author_status",
     ),
-    path("people/users/", login_required(views.users), name="users"),
+    path("users/", login_required(views.users), name="users"),
     path(
-        "people/users/add/",
+        "users/add/",
         login_required(
             views.UserAddView.as_view(success_url=reverse_lazy("library:users"))
         ),
         name="user_add",
     ),
     path(
-        "people/users/<int:person_id>/",
+        "users/<int:person_id>/",
         login_required(views.user_status),
         name="user_status",
     ),
     path(
-        "people/users/<int:person_id>/delete/",
+        "users/<int:person_id>/delete/",
         login_required(views.user_delete),
         name="user_delete",
     ),

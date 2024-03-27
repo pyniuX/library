@@ -1,25 +1,23 @@
+{% extends 'library/extensions/base.html' %}
+{% block title %}
+    book status
+{% endblock title %}
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>book status</title>
-       <style>
-      .center {
-      margin-left: auto;
-      margin-right: auto;}
-      table, th, td {
+{% block head %}
+    <style>
+        .center {
+        margin-left: auto;
+        margin-right: auto;}
+        table, th, td {
         border: 1px solid;
         border-collapse: collapse;
-      }
-  </style>
-</head>
-<body>
+        }
+    </style>
+{% endblock head %}
+
+{% block content %}
     <p style="font-size: large; text-align: center" >You are watching book: {{ book.title }}.</p>
-    
+        
     <table class="center">
         <caption>Book</caption>
         <thead>
@@ -31,7 +29,7 @@
             </tr>
         </thead>
         <tbody>
-    
+
             <tr>
                 <th scope="row" >{{ book.id }}</th>
                 <td>{{ book.title }}</td>
@@ -41,8 +39,7 @@
         </tbody>
         <tfoot>
         </tfoot>
-      </table>    
-      <p style= "text-align: center" ><a href="{% url 'library:book_delete' book.id%}"><button>Delete book</button></a></p>
-      <p style= "text-align: center" ><a href="{% url 'library:books' %}"><button>Go back to books</button></a></p>
-</body>
-</html>
+    </table>    
+    <p style= "text-align: center" ><a href="{% url 'library:book_delete' book.id%}"><button>Delete book</button></a></p>
+    <p style= "text-align: center" ><a href="{% url 'library:books' %}"><button>Go back to books</button></a></p>
+{% endblock content %}

@@ -1,49 +1,46 @@
+{% extends 'library/extensions/base.html' %}
+{% block title %}
+    authors
+{% endblock title %}
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>authors</title>
-    <style>
-      .center {
-      margin-left: auto;
-      margin-right: auto;}
-      table, th, td {
-        border: 1px solid;
-        border-collapse: collapse;
-      }
+{% block head %}
+  <style>
+    .center {
+    margin-left: auto;
+    margin-right: auto;}
+    table, th, td {
+      border: 1px solid;
+      border-collapse: collapse;
+    }
   </style>
-</head>
-<body>
-    <p style="font-size: large; text-align: center" >You're in authors menu, shakalakamou!</p>
-    <p style= "text-align: center" ><a href="{% url 'library:author_add' %}"><button>Add author</button></a></p>
-    <p style= "text-align: center" ><a href="{% url 'library:people' %}"><button>Go back to people</button></a></p>
+{% endblock head %}
 
-    <table class="center">
-      <caption>
-        Authors
-      </caption>
-      <thead>
+{% block content %}
+  <p style="font-size: large; text-align: center" >You're in authors menu, shakalakamou!</p>
+  <p style= "text-align: center" ><a href="{% url 'library:author_add' %}"><button>Add author</button></a></p>
+
+
+  <table class="center">
+    <caption>
+      Authors
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Surname</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for author in authors_list %}
         <tr>
-          <th scope="col">id</th>
-          <th scope="col">Name</th>
-          <th scope="col">Surname</th>
+          <th scope="row" ><a href="{% url 'library:author_status' author.id %}">{{ author.id }}</a></th>
+          <td>{{ author.name }}</td>
+          <td>{{ author.surname }}</td>
         </tr>
-      </thead>
-      <tbody>
-        {% for author in authors_list %}
-          <tr>
-            <th scope="row" ><a href="{% url 'library:author_status' author.id %}">{{ author.id }}</a></th>
-            <td>{{ author.name }}</td>
-            <td>{{ author.surname }}</td>
-          </tr>
-        {% endfor %} 
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>    
-</body>
-</html>
+      {% endfor %} 
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>   
+{% endblock content %}

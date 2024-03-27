@@ -1,23 +1,21 @@
+{% extends 'library/extensions/base.html' %}
+{% block title %}
+    user status
+{% endblock title %}
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>user status</title>
-       <style>
-      .center {
-      margin-left: auto;
-      margin-right: auto;}
-      table, th, td {
+{% block head %}
+    <style>
+        .center {
+        margin-left: auto;
+        margin-right: auto;}
+        table, th, td {
         border: 1px solid;
         border-collapse: collapse;
-      }
-  </style>
-</head>
-<body>
+        }
+    </style>
+{% endblock head %}
+
+{% block content %}
     <p style="font-size: large; text-align: center" >You are watching user: {{ user.name }}{{ user.surname }}.</p>
     <table class="center">
         <caption>User</caption>
@@ -28,12 +26,12 @@
             <th scope="col">Second Name</th>
             <th scope="col">Surname</th>
             <th scope="col">Birth Date</th>          
-    
+
 
             </tr>
         </thead>
         <tbody>
-    
+
             <tr>
                 <th scope="row" >{{ user.id }}</th>
                 <td>{{ user.name }}</td>
@@ -44,8 +42,7 @@
         </tbody>
         <tfoot>
         </tfoot>
-      </table>    
-      <p style= "text-align: center" ><a href="{% url 'library:user_delete' user.id%}"><button>Delete user</button></a></p>
-      <p style= "text-align: center" ><a href="{% url 'library:users' %}"><button>Go back to users</button></a></p>
-</body>
-</html>
+    </table>    
+    <p style= "text-align: center" ><a href="{% url 'library:user_delete' user.id%}"><button>Delete user</button></a></p>
+    <p style= "text-align: center" ><a href="{% url 'library:users' %}"><button>Go back to users</button></a></p>
+{% endblock content %}
