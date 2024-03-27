@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView
 
-from .forms import AuthorForm, BookForm, BookInAuthorForm
+from .forms import AuthorForm, BookForm, BookInAuthorForm, LoginForm
 from .models import Book, Person, Rent
 
 
@@ -39,6 +39,7 @@ class RentAddView(CreateView):
 class LoginView(LoginView):
     template_name = "library/login.html"
     next_page = reverse_lazy("library:index")
+    form_class = LoginForm
 
 
 def index(request):

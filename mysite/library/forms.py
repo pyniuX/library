@@ -1,4 +1,5 @@
-from django.forms import ModelForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.forms import CharField, ModelForm, PasswordInput, TextInput
 
 from .models import Book, Person
 
@@ -26,3 +27,24 @@ class BookInAuthorForm(ModelForm):
     class Meta:
         model = Book
         fields = ["title"]
+
+
+class LoginForm(AuthenticationForm):
+    username = CharField(
+        label="",
+        widget=TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Input username",
+            }
+        ),
+    )
+    password = CharField(
+        label="",
+        widget=PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "password",
+            }
+        ),
+    )
