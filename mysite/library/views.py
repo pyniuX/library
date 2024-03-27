@@ -129,13 +129,13 @@ def user_delete(request, person_id):
 
 
 def books(request):
-    books_list = Book.objects.all().active().prefetch_related("authors")
-    context = {"books_list": books_list}
+    books = Book.objects.all().active().prefetch_related("authors")
+    context = {"books": books}
     return render(request, "library/books.html", context)
 
 
 def book_status(request, book_id):
-    queryset = Book.objects.filter(id=book_id).status()
+    queryset = Book.objects.filter(id=book_id).status().prefetch_related("authors")
     book = get_object_or_404(queryset)
     context = {"book": book}
     return render(request, "library/book_status.html", context)

@@ -10,7 +10,7 @@
 {% block content %}
     <p style="font-size: large; text-align: center" >You are watching book: {{ book.title }}.</p>
     <div id="book" class="padded">
-        <table class="center ; table table-condensed">
+        <table class="center table table-condensed">
             <caption>Book</caption>
             <thead>
                 <tr>
@@ -25,7 +25,15 @@
                 <tr>
                     <th scope="row" >{{ book.id }}</th>
                     <td>{{ book.title }}</td>
-                    <td>{{ book.authors.all }}</td>
+                    <td>
+                    {% for author in book.authors.all %}
+                        {% if  forloop.last %} 
+                            {{ author.name }} {{ author.surname }} 
+                        {% else %}
+                            {{ author.name }} {{ author.surname }},<br/>
+                        {% endif %}
+                    {% endfor %}
+                    </td>
                     <td>{{ book.is_available }}</td>
                 </tr>
             </tbody>

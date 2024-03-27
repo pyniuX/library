@@ -11,7 +11,7 @@
   <p style="font-size: large; text-align: center" >You're in books, shibidubda!</p>
   <p style= "text-align: center" ><a href="{% url 'library:book_add' %}"><button>Add book</button></a></p>
   <div id="books_table" class="padded">
-    <table class="center; table table-condensed">
+    <table class="center table table-condensed">
       <caption>
         Books
       </caption>
@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for book in books_list %}
+        {% for book in books %}
           <tr>
             <th scope="row" ><a href="{% url 'library:book_status' book.id %}">{{ book.id }}</a></th>
             <td>{% for author in book.authors.all %}
