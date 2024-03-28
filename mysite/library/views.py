@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView
@@ -134,6 +135,10 @@ def book_delete(request, book_id):
     book.is_active = False
     book.save()
     return redirect(reverse("library:books"))
+
+
+def test(request):
+    return HttpResponse("odpowiedz")
 
 
 def rents(request):

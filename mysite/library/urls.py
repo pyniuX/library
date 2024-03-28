@@ -72,4 +72,5 @@ urlpatterns = [
         login_required(views.rent_return),
         name="rent_return",
     ),
+    
 ]
