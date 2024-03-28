@@ -55,8 +55,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+if DEBUG:
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
 
 ROOT_URLCONF = "mysite.urls"
 
@@ -75,6 +78,8 @@ TEMPLATES = [
         },
     },
 ]
+if DEBUG:
+    TEMPLATES[0]["BACKEND"] = "django.template.backends.django.DjangoTemplates"
 
 WSGI_APPLICATION = "mysite.wsgi.application"
 
