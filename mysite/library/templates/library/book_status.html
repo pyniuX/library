@@ -3,43 +3,41 @@
     book status
 {% endblock title %}
 
-{% block head %}
-  {% include "library/extensions/style_table.html" %}
-{% endblock head %}
 
 {% block content %}
     <p style="font-size: large; text-align: center" >You are watching book: {{ book.title }}.</p>
     <div id="book" class="padded">
-        <table class="center table table-condensed">
-            <caption>Book</caption>
-            <thead>
-                <tr>
-                <th scope="col">id</th>
-                <th scope="col">Title</th>
-                <th scope="col">Authors</th>
-                <th scope="col">Is available</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr>
-                    <th scope="row" >{{ book.id }}</th>
-                    <td>{{ book.title }}</td>
-                    <td>
-                    {% for author in book.authors.all %}
-                        {% if  forloop.last %} 
-                            {{ author.name }} {{ author.surname }} 
-                        {% else %}
-                            {{ author.name }} {{ author.surname }},<br/>
-                        {% endif %}
-                    {% endfor %}
-                    </td>
-                    <td>{{ book.is_available }}</td>
-                </tr>
-            </tbody>
-            <tfoot>
-            </tfoot>
-        </table>    
+        <div class="panel-body">
+            <table class="center table table-condensed">
+                <caption>Book</caption>
+                <thead>
+                    <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Authors</th>
+                    <th scope="col">Is available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" >{{ book.id }}</th>
+                        <td>{{ book.title }}</td>
+                        <td>
+                        {% for author in book.authors.all %}
+                            {% if  forloop.last %} 
+                                {{ author.name }} {{ author.surname }} 
+                            {% else %}
+                                {{ author.name }} {{ author.surname }},<br/>
+                            {% endif %}
+                        {% endfor %}
+                        </td>
+                        <td>{{ book.is_available }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>    
+        </div>
     </div>
     <p style= "text-align: center" ><a href="{% url 'library:book_delete' book.id%}"><button>Delete book</button></a></p>
     <p style= "text-align: center" ><a href="{% url 'library:books' %}"><button>Go back to books</button></a></p>

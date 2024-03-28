@@ -3,39 +3,37 @@
     user status
 {% endblock title %}
 
-{% block head %}
-  {% include "library/extensions/style_table.html" %}
-{% endblock head %}
-
 {% block content %}
     <p style="font-size: large; text-align: center" >You are watching user: {{ user.name }}{{ user.surname }}.</p>
     <div id="user" class="padded">
-        <table class="center table table-condensed">
-            <caption>User</caption>
-            <thead>
-                <tr>
-                <th scope="col">id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Second Name</th>
-                <th scope="col">Surname</th>
-                <th scope="col">Birth Date</th>          
+        <div class="panel-body">
+            <table class="center table table-condensed">
+                <caption>User</caption>
+                <thead>
+                    <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Second Name</th>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Birth Date</th>          
 
 
-                </tr>
-            </thead>
-            <tbody>
+                    </tr>
+                </thead>
+                <tbody>
 
-                <tr>
-                    <th scope="row" >{{ user.id }}</th>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.second_name }}</td>
-                    <td>{{ user.surname }}</td>
-                    <td>{{ user.birth_date }}</td>
-                </tr>
-            </tbody>
-            <tfoot>
-            </tfoot>
-        </table>    
+                    <tr>
+                        <th scope="row" >{{ user.id }}</th>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.second_name }}</td>
+                        <td>{{ user.surname }}</td>
+                        <td>{{ user.birth_date }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
     </div>
     <p style= "text-align: center" ><a href="{% url 'library:user_delete' user.id%}"><button>Delete user</button></a></p>
 {% endblock content %}

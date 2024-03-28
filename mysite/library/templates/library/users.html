@@ -3,39 +3,36 @@
     users
 {% endblock title %}
 
-{% block head %}
-  {% include "library/extensions/style_table.html" %}
-{% endblock head %}
-
-
 {% block content %}
   <p style="font-size: large; text-align: center" >You're in users menu, shakalakamou!</p>
   <p style= "text-align: center" ><a href="{% url 'library:user_add' %}"><button>Add user</button></a></p>
   <div id="users_table" class="padded">
-    <table class="center table table-condensed">
-      <caption>
-        Active users
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">id</th>
-          <th scope="col">Name</th>
-          <th scope="col">Surname</th>
-          <th scope="col">Ongoing rents</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in users_list %}
+    <div class="panel-body">
+      <table class="center table table-condensed">
+        <caption>
+          Active users
+        </caption>
+        <thead>
           <tr>
-            <th scope="row" ><a href="{% url 'library:user_status' user.id %}">{{ user.id }}</a></th>
-            <td>{{ user.name }}</td>
-            <td>{{ user.surname }}</td>
-            <td>{{ user.rents_count }}</td>
+            <th scope="col">id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Ongoing rents</th>
           </tr>
-        {% endfor %} 
-      </tbody>
-      <tfoot>
-      </tfoot>
-    </table>    
+        </thead>
+        <tbody>
+          {% for user in users_list %}
+            <tr>
+              <th scope="row" ><a href="{% url 'library:user_status' user.id %}">{{ user.id }}</a></th>
+              <td>{{ user.name }}</td>
+              <td>{{ user.surname }}</td>
+              <td>{{ user.rents_count }}</td>
+            </tr>
+          {% endfor %} 
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>    
+    </div>
   </div>
 {% endblock content %}

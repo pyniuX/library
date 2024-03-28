@@ -3,36 +3,34 @@
     rent status
 {% endblock title %}
 
-{% block head %}
-  {% include "library/extensions/style_table.html" %}
-{% endblock head %}
-
 {% block content %}
     <p style="font-size: large; text-align: center" >You are watching book: {{ rent.book }} rented by {{ rent.user }}.</p>
     <div id="rent" class="padded">
-        <table class="center table table-condensed">
-            <caption>Rent</caption>
-            <thead>
-                <tr>
-                <th scope="col">id</th>
-                <th scope="col">User</th>
-                <th scope="col">Book</th>
-                <th scope="col">borrow_date</th>
-                <th scope="col">return_date</th>          
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row" >{{ rent.id }}</th>
-                    <td>{{ rent.user }}</td>
-                    <td>{{ rent.book }}</td>
-                    <td>{{ rent.borrow_date }}</td>
-                    <td>{{ rent.return_date }}</td>
-                </tr>
-            </tbody>
-            <tfoot>
-            </tfoot>
-        </table>    
+        <div class="panel-body">
+            <table class="center table table-condensed">
+                <caption>Rent</caption>
+                <thead>
+                    <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Book</th>
+                    <th scope="col">borrow_date</th>
+                    <th scope="col">return_date</th>          
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" >{{ rent.id }}</th>
+                        <td>{{ rent.user }}</td>
+                        <td>{{ rent.book }}</td>
+                        <td>{{ rent.borrow_date }}</td>
+                        <td>{{ rent.return_date }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>    
+        </div>
     </div>
     <p style= "text-align: center" ><a href="{% url 'library:rents' %}"><button>Go back to rents</button></a></p>
     <p style= "text-align: center" ><a href="{% url 'library:rent_return' rent.id %}"><button>Finish rent</button></a></p>
