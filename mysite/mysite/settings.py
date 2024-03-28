@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "library.apps.LibraryConfig",
-    "debug_toolbar",
     "bootstrap3",
 ]
 
 if DEBUG:
-    INSTALLED_APPS += ["django_extensions"]
+    INSTALLED_APPS += [
+        "django_extensions",
+        "debug_toolbar",
+    ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
