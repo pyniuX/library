@@ -166,6 +166,8 @@ def rent_return(request, rent_id):
 # DONE:  w błedzie formularz nie powinien być zerowany
 # DONE: lista ksiazek w authors ma byc wyswietlana w nowej lini bez przecinka w ostatnim(lub w ogóle bez)
 # DONE: pouzywac nazw urlów
-# TODO: logowanie  - link na chacie
-# TODO: deployment django girls
-# TODO: wyglad
+# DONE: logowanie  - link na chacie
+# DONE: deployment django girls
+# DONE: wyglad
+# TODO: allowed host o co biega w końcu
+# TODO: static files to root folder
