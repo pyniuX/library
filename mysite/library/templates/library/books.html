@@ -5,7 +5,7 @@
 
 {% block content %}
   <p style="font-size: large; text-align: center" >You're in books, shibidubda!</p>
-  <p style= "text-align: center" ><a href="{% url 'library:book_add' %}"><button>Add book</button></a></p>
+  <p style= "text-align: center" ><a href="{% url 'library:book_add' %}"><button class="btn btn-default">Add book</button></a></p>
   <div id="books_table" class="padded">
     <div class="panel-body">
       <table class="center table table-condensed">
@@ -22,8 +22,8 @@
         </thead>
         <tbody>
           {% for book in books %}
-            <tr>
-              <th scope="row" ><a href="{% url 'library:book_status' book.id %}">{{ book.id }}</a></th>
+            <tr class={% if book.is_available %}"success"{% else %}'danger'{% endif %}>
+              <th scope="row" ><a href="{% url 'library:book_status' book.id %}"><span  class="text-primary" >{{ book.id }}</span></a></th>
               <td>{% for author in book.authors.all %}
                     {% if forloop.last %}
                       {{ author }}

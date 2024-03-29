@@ -32,6 +32,6 @@
             </table>    
         </div>
     </div>
-    <p style= "text-align: center" ><a href="{% url 'library:rents' %}"><button>Go back to rents</button></a></p>
-    <p style= "text-align: center" ><a href="{% url 'library:rent_return' rent.id %}"><button>Finish rent</button></a></p>
+    <p style= "text-align: center" ><a href="{% url 'library:rents' %}"><button class="btn btn-default">Go back to rents</button></a>
+    <a href="{% url 'library:rent_return' rent.id %}"><button class="btn btn-default">Finish rent</button></a></p>
 {% endblock content %}
