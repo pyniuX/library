@@ -55,7 +55,7 @@ class Person(IsActive):
             """
             Returns authors (persons with at least one written book).
             """
-            ids = [self.filter(book__authors__isnull=False).distinct().values("id")]
+            ids = self.filter(book__authors__isnull=False).distinct().values("id")
             return self.filter(id__in=ids)
             # tested
 

@@ -169,5 +169,6 @@ def rent_return(request, rent_id):
 # DONE: logowanie  - link na chacie
 # DONE: deployment django girls
 # DONE: wyglad
-# TODO: allowed host o co biega w końcu
-# TODO: static files to root folder
+# DONE: allowed host o co biega w końcu
+# DONE: static files to root folder
+# TODO: logout button
