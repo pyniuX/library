@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -28,6 +28,14 @@ class LoginView(LoginView):
     template_name = "library/login.html"
     next_page = reverse_lazy("library:index")
     form_class = LoginForm
+
+
+# TODO: change na,e
+
+
+class LogoutView(LogoutView):
+    next_page = reverse_lazy("library:index")
+    template_name = "library/index.html"
 
 
 def index(request):

@@ -25,6 +25,14 @@
             </ul>
           </li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <form action="{% url 'logout' %}" method="post"> 
+              {% csrf_token %}
+              <button class="btn btn-default navbar-btn" type="submit">Log Out</button>
+            </form>
+          </li>
+        </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
