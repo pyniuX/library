@@ -4,7 +4,7 @@
 {% endblock title %}
 
 {% block content %}
-    <p style="font-size: large; text-align: center" >You are watching book: {{ rent.book }} rented by {{ rent.user }}.</p>
+    <p style="font-size: large; text-align: center" >You are watching book: {{ rent.book.title }} rented by {{ rent.user }}.</p>
     <div id="rent" class="padded">
         <div class="panel-body">
             <table class="center table table-condensed">

@@ -29,7 +29,13 @@
               <td>{{ rent.user }}</td>
               <td>{{ rent.book }}</td>
               <td>{{ rent.borrow_date }}</td>
-              <td>{{ rent.return_date }}</td>
+              <td>
+                {%  if rent.return_date %}
+                  {{ rent.return_date }}
+                {% else %}
+                  <div class="text-danger">{{ rent.return_date }}</div>
+                {% endif %}
+              </td>
             </tr>
           {% endfor %} 
         </tbody>
